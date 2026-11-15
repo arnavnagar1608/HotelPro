@@ -1,12 +1,12 @@
 /* ==========================================================================
-   HotelPro - Master Client Controller (Vanilla JavaScript)
+   Room Rental - Master Client Controller (Vanilla JavaScript)
    Connects to Backend REST API (server.js) & Database (database.json)
    With automatic fallback to localStorage if running standalone!
    ========================================================================== */
 
 const API_BASE = "http://localhost:5000/api";
 
-// --- 1. Master Data: 8 PG Rooms in Indore (Client Cache) ---
+// --- 1. Master Data: Active PG Rooms in Indore (Client Cache) ---
 const DEFAULT_ROOMS = [
   {
     id: 1,
@@ -48,19 +48,6 @@ const DEFAULT_ROOMS = [
     amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Water Included"]
   },
   {
-    id: 4,
-    name: "Budget Triple Room",
-    price: 2500,
-    type: "budget",
-    occupancy: "BUDGET OCC.",
-    location: "Pardesipura",
-    rating: 4.5,
-    reviewsCount: 20,
-    description: "Economical budget triple sharing room with clean surroundings, RO water, security cameras, and electricity included.",
-    image: "images/room-shelves.jpg",
-    amenities: ["CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
-  },
-  {
     id: 5,
     name: "Premium Single Room",
     price: 3500,
@@ -85,32 +72,6 @@ const DEFAULT_ROOMS = [
     description: "Bright and airy double room near Aurobindo campus, featuring individual beds, ceiling fan, storage racks, and daily maintenance.",
     image: "images/room-double-5.jpg",
     amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Furnished"]
-  },
-  {
-    id: 7,
-    name: "Standard Triple Sharing",
-    price: 2800,
-    type: "triple",
-    occupancy: "TRIPLE OCC.",
-    location: "Pardesipura",
-    rating: 4.6,
-    reviewsCount: 17,
-    description: "Standard triple room with spacious layout, tiled flooring, natural airflow, and proximity to coaching institutes & Pardesipura IT hub.",
-    image: "images/room-bed.jpg",
-    amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Water Included"]
-  },
-  {
-    id: 8,
-    name: "Economy Budget Room",
-    price: 2500,
-    type: "budget",
-    occupancy: "BUDGET OCC.",
-    location: "Near Aurobindo",
-    rating: 4.4,
-    reviewsCount: 14,
-    description: "Lowest cost budget accommodation near Aurobindo with essential utilities, clean drinking RO water, and safe CCTV premises.",
-    image: "images/room-balcony.jpg",
-    amenities: ["CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
   }
 ];
 
@@ -142,13 +103,18 @@ const PROPERTY_LOCATIONS = [
 // --- 3. Database Initialization (Browser Storage) ---
 function initDatabase() {
   const currentStored = localStorage.getItem("hp_rooms");
-  // Automatically migrate from old mock hotel rooms or test rooms to the 8 real PG rooms
-  if (!currentStored || currentStored.includes("Deluxe King Room") || currentStored.includes("svdzfg x") || currentStored.includes("Ocean Vista Penthouse") || currentStored.includes("Family Garden Haven")) {
+  // Automatically migrate from legacy mock rooms or deleted rooms (4, 7, 8) to active rooms
+  if (!currentStored 
+      || currentStored.includes("Deluxe King Room") 
+      || currentStored.includes("svdzfg x") 
+      || currentStored.includes("Budget Triple Room") 
+      || currentStored.includes("Standard Triple Sharing") 
+      || currentStored.includes("Economy Budget Room")) {
     localStorage.setItem("hp_rooms", JSON.stringify(DEFAULT_ROOMS));
   } else {
     try {
       const parsed = JSON.parse(currentStored);
-      if (!Array.isArray(parsed) || parsed.length < 8) {
+      if (!Array.isArray(parsed) || parsed.length !== 5) {
         localStorage.setItem("hp_rooms", JSON.stringify(DEFAULT_ROOMS));
       }
     } catch {
@@ -157,7 +123,7 @@ function initDatabase() {
   }
   if (!localStorage.getItem("hp_users")) {
     const seedUsers = [
-      { name: "Hotel Admin", email: "admin@hotelpro.com", password: "adminpassword", role: "admin" },
+      { name: "Room Rental Admin", email: "admin@roomrental.com", password: "adminpassword", role: "admin" },
       { name: "Rajat Yadav", email: "rajatyadav25009@gmail.com", password: "password123", role: "customer" }
     ];
     localStorage.setItem("hp_users", JSON.stringify(seedUsers));
@@ -190,7 +156,7 @@ function getStoredRooms() {
     const raw = localStorage.getItem("hp_rooms");
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length >= 8 && !parsed.some(r => r.name === 'Deluxe King Room' || r.name === 'svdzfg x')) {
+      if (Array.isArray(parsed) && parsed.length === 5 && !parsed.some(r => [4, 7, 8].includes(Number(r.id)) || r.name === 'Deluxe King Room' || r.name === 'svdzfg x')) {
         return parsed;
       }
     }
@@ -286,13 +252,15 @@ async function fetchRooms() {
     try {
       const { data, error } = await sb.from("rooms").select("*").order("room_id", { ascending: true });
       if (!error && data) {
-        // Detect if Supabase contains old mock rooms (Deluxe King Room, svdzfg x, etc.) or has fewer than 8 rooms
-        const hasLegacy = data.length < 8 || data.some(r => 
+        // Detect if Supabase contains old mock rooms, deleted rooms (4, 7, 8), or differs from the 5 active rooms
+        const hasLegacy = data.length !== 5 || data.some(r => 
           r.name === 'Deluxe King Room' || r.name === 'svdzfg x' || r.name === 'Executive Luxury Suite' || r.name === 'Ocean Vista Penthouse'
+          || r.name === 'Budget Triple Room' || r.name === 'Standard Triple Sharing' || r.name === 'Economy Budget Room'
+          || [4, 7, 8].includes(Number(r.room_id || r.id))
         );
 
         if (hasLegacy) {
-          console.log("Supabase contains old mock rooms. Auto-updating Supabase to the 8 official PG rooms with real photos...");
+          console.log("Supabase contains old/deleted rooms. Auto-updating Supabase to the 5 official PG rooms with real photos...");
           try {
             await sb.from("rooms").delete().neq("room_id", 0);
             const rowsToInsert = DEFAULT_ROOMS.map(r => ({
@@ -312,14 +280,14 @@ async function fetchRooms() {
           localStorage.setItem("hp_rooms", JSON.stringify(DEFAULT_ROOMS));
           applyRoomFilters();
           return;
-        } else if (data.length >= 8) {
+        } else if (data.length === 5) {
           loadedRooms = data.map(r => ({
             id: r.room_id || r.id,
             name: r.name,
             price: Number(r.price),
-            type: r.type || (Number(r.price) >= 3500 ? 'single' : (Number(r.price) >= 3000 ? 'double' : (Number(r.price) >= 2700 ? 'triple' : 'budget'))),
-            occupancy: r.occupancy || (r.name.includes("Single") ? "SINGLE OCC." : (r.name.includes("Double") ? "DOUBLE OCC." : (r.name.includes("Budget") ? "BUDGET OCC." : "TRIPLE OCC."))),
-            location: r.location || (r.name.includes("Aurobindo") || r.id === 5 || r.id === 6 || r.id === 8 ? "Near Aurobindo" : "Pardesipura"),
+            type: r.type || (Number(r.price) >= 3500 ? 'single' : (Number(r.price) >= 3000 ? 'double' : 'triple')),
+            occupancy: r.occupancy || (r.name.includes("Single") ? "SINGLE OCC." : (r.name.includes("Double") ? "DOUBLE OCC." : "TRIPLE OCC.")),
+            location: r.location || (r.name.includes("Aurobindo") || r.id === 5 || r.id === 6 ? "Near Aurobindo" : "Pardesipura"),
             rating: Number(r.rating) || 4.8,
             reviewsCount: Number(r.reviews_count || r.reviewsCount) || 12,
             description: r.description,
@@ -344,7 +312,7 @@ async function fetchRooms() {
     const res = await fetch(`${API_BASE}/rooms`, { method: "GET" });
     if (res.ok) {
       const data = await res.json();
-      if (Array.isArray(data) && data.length >= 8 && !data.some(r => r.name === 'Deluxe King Room' || r.name === 'svdzfg x')) {
+      if (Array.isArray(data) && data.length === 5 && !data.some(r => [4, 7, 8].includes(Number(r.id)))) {
         loadedRooms = data;
         localStorage.setItem("hp_rooms", JSON.stringify(data));
         console.log("✓ Rooms loaded live from backend database (database.json)");
@@ -362,7 +330,7 @@ async function fetchRooms() {
     localData = JSON.parse(localStorage.getItem("hp_rooms"));
   } catch {}
 
-  if (localData && Array.isArray(localData) && localData.length >= 8 && !localData.some(r => r.name === 'Deluxe King Room' || r.name === 'svdzfg x')) {
+  if (localData && Array.isArray(localData) && localData.length === 5 && !localData.some(r => [4, 7, 8].includes(Number(r.id)))) {
     loadedRooms = localData;
   } else {
     loadedRooms = DEFAULT_ROOMS;

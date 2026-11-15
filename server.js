@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * HotelPro - Complete Backend Server & REST API (Node.js Vanilla)
+ * Room Rental - Complete Backend Server & REST API (Node.js Vanilla)
  * ==========================================================================
  * Built with native Node.js 'http', 'fs', and 'path' modules.
  * Zero external npm packages required!
@@ -64,19 +64,6 @@ const SEED_DATA = {
       amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Water Included"]
     },
     {
-      id: 4,
-      name: "Budget Triple Room",
-      price: 2500,
-      type: "budget",
-      occupancy: "BUDGET OCC.",
-      location: "Pardesipura",
-      rating: 4.5,
-      reviewsCount: 20,
-      description: "Economical budget triple sharing room with clean surroundings, RO water, security cameras, and electricity included.",
-      image: "images/room-shelves.jpg",
-      amenities: ["CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
-    },
-    {
       id: 5,
       name: "Premium Single Room",
       price: 3500,
@@ -101,36 +88,10 @@ const SEED_DATA = {
       description: "Bright and airy double room near Aurobindo campus, featuring individual beds, ceiling fan, storage racks, and daily maintenance.",
       image: "images/room-double-5.jpg",
       amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Furnished"]
-    },
-    {
-      id: 7,
-      name: "Standard Triple Sharing",
-      price: 2800,
-      type: "triple",
-      occupancy: "TRIPLE OCC.",
-      location: "Pardesipura",
-      rating: 4.6,
-      reviewsCount: 17,
-      description: "Standard triple room with spacious layout, tiled flooring, natural airflow, and proximity to coaching institutes & Pardesipura IT hub.",
-      image: "images/room-bed.jpg",
-      amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Water Included"]
-    },
-    {
-      id: 8,
-      name: "Economy Budget Room",
-      price: 2500,
-      type: "budget",
-      occupancy: "BUDGET OCC.",
-      location: "Near Aurobindo",
-      rating: 4.4,
-      reviewsCount: 14,
-      description: "Lowest cost budget accommodation near Aurobindo with essential utilities, clean drinking RO water, and safe CCTV premises.",
-      image: "images/room-balcony.jpg",
-      amenities: ["CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
     }
   ],
   users: [
-    { name: "Hotel Admin", email: "admin@hotelpro.com", password: "adminpassword", role: "admin" },
+    { name: "Room Rental Admin", email: "admin@roomrental.com", password: "adminpassword", role: "admin" },
     { name: "Rajat Yadav", email: "rajatyadav25009@gmail.com", password: "password123", role: "customer" }
   ],
   bookings: [
@@ -250,7 +211,7 @@ const server = http.createServer(async (req, res) => {
   // 1. REST API: /api/rooms
   // =========================================================================
 
-  // GET /api/rooms - Retrieve all hotel rooms
+  // GET /api/rooms - Retrieve all active rooms
   if (req.method === "GET" && pathname === "/api/rooms") {
     const db = readDatabase();
     return sendJson(res, 200, db.rooms || []);
@@ -502,7 +463,7 @@ const server = http.createServer(async (req, res) => {
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
       res.writeHead(404, { "Content-Type": "text/html" });
-      res.end(`<h2>404 Not Found</h2><p>The requested file does not exist on HotelPro server.</p><p><a href="/">Return Home</a></p>`);
+      res.end(`<h2>404 Not Found</h2><p>The requested file does not exist on Room Rental server.</p><p><a href="/">Return Home</a></p>`);
       return;
     }
 
@@ -523,7 +484,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`\n========================================================`);
-  console.log(`  ★ HOTELPRO BACKEND SERVER RUNNING ★`);
+  console.log(`  ★ ROOM RENTAL BACKEND SERVER RUNNING ★`);
   console.log(`  URL: http://localhost:${PORT}`);
   console.log(`  Database File: ${DB_FILE}`);
   console.log(`  REST APIs: /api/rooms, /api/bookings, /api/auth`);

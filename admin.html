@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - HotelPro</title>
+  <title>Admin Dashboard - Room Rental</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <!-- Navigation Bar -->
   <nav class="navbar">
-    <a class="brand" href="index.html">HotelPro<span>.</span> <small style="font-size:13px;color:#888;">Admin</small></a>
+    <a class="brand" href="index.html">Room Rental<span>.</span> <small style="font-size:13px;color:#888;">Admin</small></a>
     <div class="nav-links">
       <a href="index.html">View Website</a>
       <a href="my-bookings.html">My Bookings</a>
@@ -21,13 +21,13 @@
   <main class="page-container">
     <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;">
       <div>
-        <span class="eyebrow">HOTEL MANAGEMENT SYSTEM</span>
+        <span class="eyebrow">ROOM RENTAL MANAGEMENT SYSTEM</span>
         <h1>Admin Dashboard</h1>
         <p style="color:#666;">View all customer bookings, registered user accounts, and manage room inventory.</p>
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-        <button type="button" class="action-btn-success" onclick="resetToOfficial8Rooms()" style="padding:8px 14px;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:var(--primary-color);color:white;border:none;border-radius:4px;">
-          <span>⚡</span> Sync 8 Official PG Rooms (With Photos)
+        <button type="button" class="action-btn-success" onclick="resetToOfficialRooms()" style="padding:8px 14px;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:var(--primary-color);color:white;border:none;border-radius:4px;">
+          <span>⚡</span> Sync Official PG Rooms (With Photos)
         </button>
         <span id="supabaseBadge" class="status-badge" style="background:#f3f4f6;color:#4b5563;border:1px solid #e5e7eb;font-size:12px;padding:6px 12px;">⚡ Supabase Cloud: Checking...</span>
         <span id="serverBadge" class="status-badge" style="background:#f3f4f6;color:#4b5563;border:1px solid #e5e7eb;font-size:12px;padding:6px 12px;">🖥️ Server API: Checking...</span>
@@ -84,7 +84,7 @@
     <!-- Section 3: Add New Room -->
     <div class="admin-form-box">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
-        <h3>Add a New Hotel Room</h3>
+        <h3>Add a New Room</h3>
         <span style="font-size:12px;color:#777;">Auto-syncs across Supabase Cloud, Node Server & Local Storage</span>
       </div>
       <form id="addRoomForm" onsubmit="handleAddRoom(event)">
@@ -149,7 +149,7 @@
   <div class="booking-overlay" id="editRoomModal">
     <div class="booking-modal" style="max-width:540px;">
       <button class="booking-close" type="button" onclick="closeEditModal()">×</button>
-      <span class="eyebrow">UPDATE HOTEL ROOM</span>
+      <span class="eyebrow">UPDATE ROOM DETAILS</span>
       <h2 id="editModalTitle">Edit Room Details</h2>
       <p style="font-size:13px;color:#666;margin-bottom:15px;">Modify the room's name, price, photo, or description below:</p>
 
@@ -230,12 +230,14 @@
 
           if (!rRes.error && rRes.data) {
             sbConnected = true;
-            const hasLegacy = rRes.data.length < 8 || rRes.data.some(r => 
-              r.name === 'Deluxe King Room' || r.name === 'svdzfg x' || r.name === 'Executive Luxury Suite' || r.name === 'Ocean Vista Penthouse'
+            const hasLegacy = rRes.data.length !== 5 || rRes.data.some(r => 
+              [4, 7, 8].includes(Number(r.room_id || r.id)) ||
+              r.name === 'Deluxe King Room' || r.name === 'svdzfg x' || r.name === 'Executive Luxury Suite' || r.name === 'Ocean Vista Penthouse' ||
+              r.name === 'Budget Triple Room' || r.name === 'Standard Triple Sharing' || r.name === 'Economy Budget Room'
             );
 
             if (hasLegacy) {
-              console.log("Supabase has legacy/test rooms. Auto-upgrading Supabase to the 8 official PG rooms with real photos...");
+              console.log("Supabase has legacy/deleted rooms. Auto-updating Supabase to the 5 official PG rooms with real photos...");
               try {
                 await sb.from("rooms").delete().neq("room_id", 0);
                 const rows = DEFAULT_ROOMS.map(nr => ({
@@ -368,12 +370,12 @@
 
       // 3. Fallbacks and bidirectional merge with localStorage / defaults
       let localRooms = getStoredRooms();
-      const hasOldRooms = localRooms.length < 8 || localRooms.some(r => r.name === 'Deluxe King Room' || r.name === 'svdzfg x');
+      const hasOldRooms = localRooms.length !== 5 || localRooms.some(r => [4, 7, 8].includes(Number(r.id)) || r.name === 'Deluxe King Room' || r.name === 'svdzfg x');
       if (hasOldRooms) {
         localRooms = DEFAULT_ROOMS;
         localStorage.setItem('hp_rooms', JSON.stringify(DEFAULT_ROOMS));
       }
-      if (rooms.length < 8 || rooms.some(r => r.name === 'Deluxe King Room' || r.name === 'svdzfg x')) {
+      if (rooms.length !== 5 || rooms.some(r => [4, 7, 8].includes(Number(r.id)) || r.name === 'Deluxe King Room' || r.name === 'svdzfg x')) {
         rooms = DEFAULT_ROOMS;
       }
       currentAdminRooms = rooms;
@@ -461,8 +463,8 @@
       `).join('');
     }
 
-    async function resetToOfficial8Rooms() {
-      if (!confirm("Sync site inventory to the 8 official PG rooms with real photos? This will clean up any old test rooms and sync across Supabase & Browser Storage.")) return;
+    async function resetToOfficialRooms() {
+      if (!confirm("Sync site inventory to the official PG rooms with real photos? This will clean up any old test or removed rooms and sync across Supabase & Browser Storage.")) return;
       const sb = getSupabaseClient();
       if (sb) {
         try {
@@ -476,14 +478,14 @@
             amenities: nr.amenities
           }));
           await sb.from("rooms").insert(rows);
-          console.log("✓ Supabase Cloud reset to 8 rooms");
+          console.log("✓ Supabase Cloud reset to 5 official rooms");
         } catch (e) {
           console.warn("Supabase reset error:", e.message);
         }
       }
       localStorage.setItem("hp_rooms", JSON.stringify(DEFAULT_ROOMS));
       await loadAdminData();
-      alert("✓ 8 Official PG Rooms loaded successfully!");
+      alert("✓ Official PG Rooms loaded successfully!");
     }
 
     // --- Add Room Form Handler ---

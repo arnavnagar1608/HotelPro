@@ -1,6 +1,6 @@
 /**
  * =========================================================================
- * HotelPro - Supabase Cloud Database Configuration
+ * Room Rental - Supabase Cloud Database Configuration
  * =========================================================================
  * To connect your Supabase database:
  * 1. Log in to https://supabase.com and create a project.

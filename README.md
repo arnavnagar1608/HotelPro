@@ -1,4 +1,4 @@
-# HotelPro - Hotel Room Management & Reservation System
+# Room Rental - PG & Room Management & Reservation System
 
 A clean, modern, and complete web project built with **HTML5, CSS3, Vanilla JavaScript, and Supabase / Backend Database**.
 
@@ -29,12 +29,12 @@ Your project is pre-configured with **Supabase Cloud PostgreSQL** support!
 
 ### Step 1: Create a Free Project on Supabase
 1. Go to [https://supabase.com](https://supabase.com) and sign up / log in.
-2. Click **"New Project"**, give it a name (e.g. `HotelPro`), and set a database password.
+2. Click **"New Project"**, give it a name (e.g. `RoomRental`), and set a database password.
 
 ### Step 2: Run the SQL Schema
 1. In your Supabase Dashboard: click **"SQL Editor"** in the left menu.
 2. Open **`schema.sql`** from your project folder, copy all contents, paste it into the SQL Editor, and click **"RUN"**.
-3. This creates all 3 tables (`rooms`, `users`, `bookings`) and seeds the initial 5 hotel rooms and admin user!
+3. This creates all 3 tables (`rooms`, `users`, `bookings`) and seeds the initial 5 rooms and admin user!
 
 ### Step 3: Add Your Keys to `supabaseConfig.js`
 1. In your Supabase Dashboard: click **Project Settings** (gear icon) -> **API**.
@@ -52,7 +52,7 @@ Your project is pre-configured with **Supabase Cloud PostgreSQL** support!
 | **`room-details.html`** | Frontend (HTML) | Dedicated Room & Booking Interface matching user layout: 3-Image Photo Gallery, Occupancy & Availability badges, Detailed Description, Included Amenities grid, House Rules list, Resident Reviews with Review submission, and Sticky Pricing Breakdown Card with "Book a Visit" and "Call for Enquiry". |
 | **`login.html`** | Frontend (HTML) | User Authentication portal: Sign In and Registration forms connected to Supabase / Backend. |
 | **`my-bookings.html`** | Frontend (HTML) | Customer Self-Service page: View booking reference IDs, dates, total price, status badges, and booking cancellation button. |
-| **`admin.html`** | Frontend (HTML) | Management Dashboard: View all customer reservations, manage registered users, update booking status, and Add/Edit/Delete hotel rooms. |
+| **`admin.html`** | Frontend (HTML) | Management Dashboard: View all customer reservations, manage registered users, update booking status, and Add/Edit/Delete rooms. |
 | **`style.css`** | Styling (CSS) | Master stylesheet: Responsive grid layouts, typography, color palette (Forest Green & Gold), modal overlays, card hover effects, and mobile media queries. |
 | **`app.js`** | Logic (JavaScript) | Master frontend logic: Room rendering, search filter, booking calculations, Google Maps location switcher, authentication state, and database sync. |
 | **`supabaseConfig.js`** | Database Config | Stores your Supabase URL & Anon Key, and initializes the Supabase Cloud Client. |
