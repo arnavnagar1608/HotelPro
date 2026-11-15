@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - HotelPro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a class="brand" href="index.html">HotelPro<span>.</span> <small style="font-size:13px;color:#888;">Admin</small></a>
+    <div class="nav-links">
+      <a href="index.html">View Website</a>
+      <a href="my-bookings.html">My Bookings</a>
+    </div>
+    <div id="navAuthContainer"></div>
+  </nav>
+
+  <main class="page-container">
+    <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;">
+      <div>
+        <span class="eyebrow">HOTEL MANAGEMENT SYSTEM</span>
+        <h1>Admin Dashboard</h1>
+        <p style="color:#666;">View all customer bookings, registered user accounts, and manage room inventory.</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <span id="supabaseBadge" class="status-badge" style="background:#f3f4f6;color:#4b5563;border:1px solid #e5e7eb;font-size:12px;padding:6px 12px;">⚡ Supabase Cloud: Checking...</span>
+        <span id="serverBadge" class="status-badge" style="background:#f3f4f6;color:#4b5563;border:1px solid #e5e7eb;font-size:12px;padding:6px 12px;">🖥️ Server API: Checking...</span>
+      </div>
+    </div>
+
+    <!-- Section 1: Customer Reservations -->
+    <div class="admin-form-box">
+      <h3>All Customer Reservations</h3>
+      <p style="font-size:13px;color:#777;margin-bottom:12px;">Data filled by guests when submitting the booking form:</p>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Ref #</th>
+              <th>Room</th>
+              <th>Guest Name</th>
+              <th>Guest Email</th>
+              <th>Dates</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Update Status</th>
+            </tr>
+          </thead>
+          <tbody id="adminBookingsBody">
+            <!-- Populated by script -->
+          </tbody>
+        </table>
+      </div>
+      <p id="noAdminBookings" style="display:none;color:#888;padding:15px;text-align:center;">No bookings found in the database yet.</p>
+    </div>
+
+    <!-- Section 2: Registered Users & Customer Accounts -->
+    <div class="admin-form-box">
+      <h3>Registered Users & Customers</h3>
+      <p style="font-size:13px;color:#777;margin-bottom:12px;">Data filled by users when registering or creating an account:</p>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>User Name</th>
+              <th>Email Address</th>
+              <th>Account Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="adminUsersBody">
+            <!-- Populated by script -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 3: Add New Room -->
+    <div class="admin-form-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+        <h3>Add a New Hotel Room</h3>
+        <span style="font-size:12px;color:#777;">Auto-syncs across Supabase Cloud, Node Server & Local Storage</span>
+      </div>
+      <form id="addRoomForm" onsubmit="handleAddRoom(event)">
+        <div class="admin-room-grid">
+          <div>
+            <label style="font-size:12px;font-weight:700;display:block;margin-bottom:5px;">Room Name *</label>
+            <input type="text" id="newRoomName" placeholder="Presidential Suite" required style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;display:block;margin-bottom:5px;">Price per Night (₹) *</label>
+            <input type="number" id="newRoomPrice" placeholder="6000" required min="100" style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <label style="font-size:12px;font-weight:700;display:block;margin-bottom:5px;">Image URL</label>
+            <input type="text" id="newRoomImage" placeholder="https://images.unsplash.com/photo-..." style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;" oninput="updateNewRoomPreview()">
+            <div id="newRoomPreviewContainer" style="margin-top:8px;display:none;">
+              <span style="font-size:11px;font-weight:700;color:#666;">PHOTO PREVIEW:</span>
+              <img id="newRoomPreviewImg" src="" alt="Preview" style="width:100%;max-height:160px;object-fit:cover;border-radius:4px;margin-top:4px;border:1px solid #eee;display:block;">
+            </div>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <label style="font-size:12px;font-weight:700;display:block;margin-bottom:5px;">Description *</label>
+            <textarea id="newRoomDesc" rows="2" placeholder="Describe the room, view, and features..." required style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;"></textarea>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <label style="font-size:12px;font-weight:700;display:block;margin-bottom:5px;">Included Amenities (comma separated)</label>
+            <input type="text" id="newRoomAmenities" value="📶 High-Speed Wi-Fi, 💡 24/7 Power Backup, 🅿️ Free Parking, 🍽️ Restaurant Nearby, 💧 24/7 Hot Water, ❄️ Air Conditioning" placeholder="📶 Free Wi-Fi, 💡 24/7 Power Backup, 🅿️ Free Parking, 🍽️ Restaurant Nearby, 💧 24/7 Hot Water, ❄️ AC" style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:16px;align-items:center;flex-wrap:wrap;">
+          <button type="submit" id="addRoomSubmitBtn" class="primary-button">+ Add Room to Website</button>
+          <span id="addRoomStatusMsg" style="font-size:13px;font-weight:600;display:none;"></span>
+        </div>
+      </form>
+    </div>
+
+    <!-- Section 4: Existing Rooms List & Edit Interface -->
+    <div class="admin-form-box">
+      <h3>Active Room Inventory</h3>
+      <p style="font-size:13px;color:#777;margin-bottom:12px;">Click <strong>"✏️ Edit"</strong> on any room to modify details, or <strong>"🗑 Delete"</strong> to remove it:</p>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Photo</th>
+              <th>Room Name</th>
+              <th>Price / Night</th>
+              <th>Description & Amenities</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminRoomsBody">
+            <!-- Populated by script -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Edit Room Modal Interface -->
+  <div class="booking-overlay" id="editRoomModal">
+    <div class="booking-modal" style="max-width:540px;">
+      <button class="booking-close" type="button" onclick="closeEditModal()">×</button>
+      <span class="eyebrow">UPDATE HOTEL ROOM</span>
+      <h2 id="editModalTitle">Edit Room Details</h2>
+      <p style="font-size:13px;color:#666;margin-bottom:15px;">Modify the room's name, price, photo, or description below:</p>
+
+      <form id="editRoomForm" onsubmit="handleSaveEditRoom(event)">
+        <input type="hidden" id="editRoomId">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <label style="font-size:12px;font-weight:700;">
+            Room Name
+            <input type="text" id="editRoomName" required style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+          </label>
+          <label style="font-size:12px;font-weight:700;">
+            Price per Night (₹)
+            <input type="number" id="editRoomPrice" required min="100" style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+          </label>
+          <label style="font-size:12px;font-weight:700;">
+            Image URL
+            <input type="text" id="editRoomImage" required style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;" oninput="updateImagePreview()">
+          </label>
+          <div>
+            <span style="font-size:11px;font-weight:700;color:#666;">IMAGE PREVIEW:</span>
+            <img id="editImagePreview" src="" alt="Room Preview" style="width:100%;height:140px;object-fit:cover;border-radius:4px;margin-top:4px;border:1px solid #eee;display:block;">
+          </div>
+          <label style="font-size:12px;font-weight:700;">
+            Description
+            <textarea id="editRoomDesc" rows="3" required style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;"></textarea>
+          </label>
+          <label style="font-size:12px;font-weight:700;">
+            Included Amenities (comma separated)
+            <input type="text" id="editRoomAmenities" placeholder="📶 Free Wi-Fi, 💡 24/7 Power Backup, 🅿️ Free Parking, 🍽️ Restaurant Nearby, 💧 Hot Water, ❄️ AC" style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+          </label>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button type="submit" id="saveEditBtn" class="primary-button" style="flex:1;">Save Room Changes</button>
+            <button type="button" onclick="closeEditModal()" class="action-btn-danger" style="padding:10px 18px;">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Supabase Cloud Database Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseConfig.js"></script>
+
+  <script src="app.js"></script>
+  <script>
+    let currentAdminRooms = [];
+
+    function updateNewRoomPreview() {
+      const url = document.getElementById('newRoomImage').value.trim();
+      const box = document.getElementById('newRoomPreviewContainer');
+      const img = document.getElementById('newRoomPreviewImg');
+      if (url) {
+        img.src = url;
+        box.style.display = 'block';
+      } else {
+        box.style.display = 'none';
+      }
+    }
+
+    async function loadAdminData() {
+      let allBookings = [];
+      let rooms = [];
+      let users = [];
+
+      const sbBadge = document.getElementById("supabaseBadge");
+      const srvBadge = document.getElementById("serverBadge");
+
+      // 1. Try Supabase Cloud Database first
+      let sbConnected = false;
+      const sb = getSupabaseClient();
+      if (sb) {
+        try {
+          const [bRes, rRes, uRes] = await Promise.all([
+            sb.from("bookings").select("*").order("created_at", { ascending: false }),
+            sb.from("rooms").select("*").order("room_id", { ascending: true }),
+            sb.from("users").select("name, email, role")
+          ]);
+
+          if (!rRes.error && rRes.data) {
+            sbConnected = true;
+            if (rRes.data.length > 0) {
+              rooms = rRes.data.map(r => ({
+                id: r.room_id || r.id,
+                name: r.name,
+                price: Number(r.price),
+                description: r.description,
+                image: r.image,
+                amenities: Array.isArray(r.amenities) && r.amenities.length > 0 ? r.amenities : [
+                  "📶 High-Speed Wi-Fi",
+                  "💡 24/7 Power Backup",
+                  "🅿️ Free Parking",
+                  "🍽️ Restaurant Nearby",
+                  "💧 24/7 Hot Water",
+                  "❄️ Air Conditioning"
+                ]
+              }));
+              localStorage.setItem('hp_rooms', JSON.stringify(rooms));
+            }
+          }
+
+          if (!bRes.error && bRes.data && bRes.data.length > 0) {
+            allBookings = bRes.data.map(b => ({
+              id: b.id,
+              roomName: b.room_name || b.roomName,
+              guestName: b.guest_name || b.guestName,
+              guestEmail: b.guest_email || b.guestEmail,
+              checkIn: b.check_in || b.checkIn,
+              checkOut: b.check_out || b.checkOut,
+              totalPrice: b.total_price || b.totalPrice,
+              status: b.status
+            }));
+            localStorage.setItem('hp_bookings', JSON.stringify(allBookings));
+          }
+
+          if (!uRes.error && uRes.data && uRes.data.length > 0) {
+            users = uRes.data;
+            localStorage.setItem('hp_users', JSON.stringify(users));
+          }
+        } catch (sbErr) {
+          console.warn("Supabase load exception:", sbErr.message);
+        }
+      }
+
+      if (sbBadge) {
+        if (sbConnected) {
+          sbBadge.textContent = "🟢 Supabase: Connected";
+          sbBadge.style.background = "#dcfce7";
+          sbBadge.style.color = "#15803d";
+          sbBadge.style.borderColor = "#86efac";
+        } else if (isSupabaseConfigured()) {
+          sbBadge.textContent = "🟡 Supabase: Waiting for schema.sql";
+          sbBadge.style.background = "#fef9c3";
+          sbBadge.style.color = "#854d0e";
+          sbBadge.style.borderColor = "#fde047";
+        } else {
+          sbBadge.textContent = "⚪ Supabase: Not Configured";
+          sbBadge.style.background = "#f3f4f6";
+          sbBadge.style.color = "#6b7280";
+          sbBadge.style.borderColor = "#e5e7eb";
+        }
+      }
+
+      // 2. Fetch from Backend Server REST API if any collection is empty
+      let serverConnected = false;
+      try {
+        const [bRes, rRes, uRes] = await Promise.all([
+          fetch("http://localhost:5000/api/bookings"),
+          fetch("http://localhost:5000/api/rooms"),
+          fetch("http://localhost:5000/api/users")
+        ]);
+
+        if (rRes.ok) {
+          serverConnected = true;
+          const sRooms = await rRes.json();
+          if (rooms.length === 0 && Array.isArray(sRooms) && sRooms.length > 0) {
+            rooms = sRooms;
+            localStorage.setItem('hp_rooms', JSON.stringify(rooms));
+          }
+        }
+        if (bRes.ok) {
+          serverConnected = true;
+          const sBookings = await bRes.json();
+          if (allBookings.length === 0 && Array.isArray(sBookings) && sBookings.length > 0) {
+            allBookings = sBookings;
+            localStorage.setItem('hp_bookings', JSON.stringify(allBookings));
+          }
+        }
+        if (uRes.ok) {
+          serverConnected = true;
+          const sUsers = await uRes.json();
+          if (users.length === 0 && Array.isArray(sUsers) && sUsers.length > 0) {
+            users = sUsers;
+            localStorage.setItem('hp_users', JSON.stringify(users));
+          }
+        }
+      } catch (err) {
+        // Node server is offline
+      }
+
+      if (srvBadge) {
+        if (serverConnected) {
+          srvBadge.textContent = "🟢 Server (Port 5000): Online";
+          srvBadge.style.background = "#dcfce7";
+          srvBadge.style.color = "#15803d";
+          srvBadge.style.borderColor = "#86efac";
+        } else {
+          srvBadge.textContent = "🟡 Server: Standalone Mode";
+          srvBadge.style.background = "#fef9c3";
+          srvBadge.style.color = "#854d0e";
+          srvBadge.style.borderColor = "#fde047";
+        }
+      }
+
+      // 3. Fallbacks and bidirectional merge with localStorage / defaults
+      const localRooms = getStoredRooms();
+      const roomMap = new Map();
+      localRooms.forEach(r => { if (r && r.id) roomMap.set(Number(r.id), r); });
+      rooms.forEach(r => { if (r && r.id) roomMap.set(Number(r.id), r); });
+      rooms = Array.from(roomMap.values());
+      if (rooms.length === 0) rooms = DEFAULT_ROOMS;
+
+      const localBookings = getStoredBookings();
+      const bookingMap = new Map();
+      localBookings.forEach(b => { if (b && b.id) bookingMap.set(b.id, b); });
+      allBookings.forEach(b => { if (b && b.id) bookingMap.set(b.id, b); });
+      allBookings = Array.from(bookingMap.values());
+
+      const localUsers = getStoredUsers();
+      const userMap = new Map();
+      localUsers.forEach(u => { if (u && u.email) userMap.set(u.email.toLowerCase(), u); });
+      users.forEach(u => { if (u && u.email) userMap.set(u.email.toLowerCase(), u); });
+      users = Array.from(userMap.values());
+
+      currentAdminRooms = rooms;
+
+      // Render Bookings Table
+      const tbody = document.getElementById('adminBookingsBody');
+      const noMsg = document.getElementById('noAdminBookings');
+
+      if (!allBookings || allBookings.length === 0) {
+        tbody.innerHTML = '';
+        noMsg.style.display = 'block';
+      } else {
+        noMsg.style.display = 'none';
+        tbody.innerHTML = allBookings.map(b => `
+          <tr>
+            <td><strong>${b.id}</strong></td>
+            <td>${b.roomName || 'Room'}</td>
+            <td>${b.guestName || 'Guest'}</td>
+            <td>${b.guestEmail || '-'}</td>
+            <td>${b.checkIn} → ${b.checkOut}</td>
+            <td><strong>₹${Number(b.totalPrice).toLocaleString('en-IN')}</strong></td>
+            <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+            <td>
+              <button class="action-btn-success" onclick="updateStatus('${b.id}', 'confirmed')">Confirm</button>
+              <button class="action-btn-danger" onclick="updateStatus('${b.id}', 'cancelled')">Cancel</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Render Registered Users Table
+      const usersBody = document.getElementById('adminUsersBody');
+      usersBody.innerHTML = users.map(u => `
+        <tr>
+          <td><strong>${u.name}</strong></td>
+          <td>${u.email}</td>
+          <td><span class="status-badge ${u.role === 'admin' ? 'status-confirmed' : 'status-pending'}">${(u.role || 'customer').toUpperCase()}</span></td>
+          <td><span style="color:#15803d;font-weight:600;">● Active</span></td>
+        </tr>
+      `).join('');
+
+      // Render Rooms Table with Edit & Delete Buttons + Thumbnail
+      const roomsBody = document.getElementById('adminRoomsBody');
+      roomsBody.innerHTML = rooms.map(r => `
+        <tr>
+          <td>#${r.id}</td>
+          <td>
+            <img src="${r.image || 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800'}" alt="${r.name}" style="width:70px;height:50px;object-fit:cover;border-radius:4px;border:1px solid #ddd;display:block;" onerror="this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800'">
+          </td>
+          <td><strong>${r.name}</strong></td>
+          <td><strong>₹${Number(r.price).toLocaleString('en-IN')}</strong></td>
+          <td>
+            <small style="color:#555;">${r.description}</small>
+            <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
+              ${(Array.isArray(r.amenities) && r.amenities.length > 0 ? r.amenities : [
+                "📶 High-Speed Wi-Fi",
+                "💡 24/7 Power Backup",
+                "🅿️ Free Parking",
+                "🍽️ Restaurant Nearby",
+                "💧 24/7 Hot Water"
+              ]).map(a => `<span class="amenity-pill" style="font-size:10px;padding:2px 6px;">${a}</span>`).join('')}
+            </div>
+          </td>
+          <td>
+            <div style="display:flex;gap:6px;">
+              <button class="action-btn-success" onclick="openEditRoomModal(${r.id})">✏️ Edit</button>
+              <button class="action-btn-danger" onclick="deleteRoom(${r.id})">🗑 Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // --- Add Room Form Handler ---
+    async function handleAddRoom(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('addRoomSubmitBtn');
+      const statusMsg = document.getElementById('addRoomStatusMsg');
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "⏳ Adding Room...";
+      }
+
+      try {
+        const nameInput = document.getElementById('newRoomName');
+        const priceInput = document.getElementById('newRoomPrice');
+        const imageInput = document.getElementById('newRoomImage');
+        const descInput = document.getElementById('newRoomDesc');
+        const aInput = document.getElementById('newRoomAmenities');
+
+        const name = nameInput.value.trim();
+        const price = Number(priceInput.value);
+        let image = imageInput.value.trim();
+        const description = descInput.value.trim();
+
+        if (!name) {
+          alert("Please enter a room name.");
+          return;
+        }
+        if (!price || isNaN(price) || price <= 0) {
+          alert("Please enter a valid price per night.");
+          return;
+        }
+        if (!image) {
+          image = "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800";
+        }
+
+        let amenities = [
+          "📶 High-Speed Wi-Fi",
+          "💡 24/7 Power & Light Backup",
+          "🅿️ Free Parking",
+          "🍽️ Restaurant Nearby",
+          "💧 24/7 Hot Water",
+          "❄️ Air Conditioning"
+        ];
+        if (aInput && aInput.value.trim()) {
+          amenities = aInput.value.split(',').map(s => s.trim()).filter(Boolean);
+        }
+
+        // Determine next unique room ID
+        const existingRooms = (currentAdminRooms && currentAdminRooms.length > 0) ? currentAdminRooms : getStoredRooms();
+        const newId = existingRooms.length > 0 ? Math.max(...existingRooms.map(r => Number(r.id) || 0)) + 1 : 1;
+
+        const newRoomData = {
+          id: newId,
+          name,
+          price,
+          description,
+          image,
+          amenities
+        };
+
+        // 1. Try Supabase Cloud Database first
+        const sb = getSupabaseClient();
+        if (sb) {
+          try {
+            const { error: sbErr } = await sb.from("rooms").insert([{
+              room_id: newId,
+              name,
+              price,
+              image,
+              description,
+              amenities
+            }]);
+            if (sbErr) {
+              console.warn("Supabase insert warning:", sbErr.message);
+            } else {
+              console.log("✓ Room inserted into Supabase Cloud 'rooms' table!");
+            }
+          } catch (sbEx) {
+            console.warn("Supabase exception:", sbEx.message);
+          }
+        }
+
+        // 2. Try Node Backend REST API (server.js & database.json)
+        try {
+          const res = await fetch("http://localhost:5000/api/rooms", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newRoomData)
+          });
+          if (res.ok) {
+            console.log("✓ Room saved to backend database.json");
+          }
+        } catch (err) {
+          console.log("Server offline, saved locally to browser storage.");
+        }
+
+        // 3. Always save to LocalStorage
+        let localRooms = getStoredRooms();
+        localRooms = localRooms.filter(r => r.id !== newId);
+        localRooms.push(newRoomData);
+        localStorage.setItem('hp_rooms', JSON.stringify(localRooms));
+        currentAdminRooms = localRooms;
+
+        // Reset form & update UI
+        document.getElementById('addRoomForm').reset();
+        const previewBox = document.getElementById('newRoomPreviewContainer');
+        if (previewBox) previewBox.style.display = 'none';
+
+        if (statusMsg) {
+          statusMsg.style.display = 'inline-block';
+          statusMsg.style.color = '#15803d';
+          statusMsg.textContent = `✓ Room "${name}" (ID #${newId}) added successfully!`;
+          setTimeout(() => { statusMsg.style.display = 'none'; }, 5000);
+        }
+
+        alert(`✓ Room "${name}" added to the site successfully!`);
+        await loadAdminData();
+      } catch (err) {
+        console.error("Error adding room:", err);
+        alert("Failed to add room: " + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "+ Add Room to Website";
+        }
+      }
+    }
+
+    // --- Edit Room Form Handlers ---
+    function openEditRoomModal(id) {
+      const room = currentAdminRooms.find(r => r.id === id);
+      if (!room) return;
+
+      document.getElementById('editRoomId').value = room.id;
+      document.getElementById('editRoomName').value = room.name;
+      document.getElementById('editRoomPrice').value = room.price;
+      document.getElementById('editRoomImage').value = room.image;
+      document.getElementById('editRoomDesc').value = room.description;
+      document.getElementById('editImagePreview').src = room.image;
+      document.getElementById('editModalTitle').textContent = `Edit Room: ${room.name}`;
+
+      const aInput = document.getElementById('editRoomAmenities');
+      if (aInput) {
+        aInput.value = (room.amenities || [
+          "📶 High-Speed Wi-Fi",
+          "💡 24/7 Power Backup",
+          "🅿️ Free Parking",
+          "🍽️ Restaurant Nearby",
+          "💧 24/7 Hot Water"
+        ]).join(', ');
+      }
+
+      document.getElementById('editRoomModal').classList.add('active');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editRoomModal').classList.remove('active');
+    }
+
+    function updateImagePreview() {
+      const url = document.getElementById('editRoomImage').value;
+      document.getElementById('editImagePreview').src = url;
+    }
+
+    async function handleSaveEditRoom(e) {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveEditBtn');
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Saving...";
+      }
+
+      try {
+        const id = Number(document.getElementById('editRoomId').value);
+        const name = document.getElementById('editRoomName').value.trim();
+        const price = Number(document.getElementById('editRoomPrice').value);
+        const image = document.getElementById('editRoomImage').value.trim();
+        const description = document.getElementById('editRoomDesc').value.trim();
+
+        let amenities = [
+          "📶 High-Speed Wi-Fi",
+          "💡 24/7 Power Backup",
+          "🅿️ Free Parking",
+          "🍽️ Restaurant Nearby",
+          "💧 24/7 Hot Water",
+          "❄️ Air Conditioning"
+        ];
+        const aInput = document.getElementById('editRoomAmenities');
+        if (aInput && aInput.value.trim()) {
+          amenities = aInput.value.split(',').map(s => s.trim()).filter(Boolean);
+        }
+
+        const updatedData = { name, price, image, description, amenities };
+
+        // 1. Try Supabase Cloud Database first
+        const sb = getSupabaseClient();
+        if (sb) {
+          try {
+            await sb.from("rooms").update({
+              name, price, image, description, amenities
+            }).eq("room_id", id);
+            console.log("✓ Room updated in Supabase Cloud PostgreSQL!");
+          } catch (sbErr) {
+            console.warn("Supabase room update error:", sbErr.message);
+          }
+        }
+
+        // 2. Send update to Backend REST API (server.js & database.json)
+        try {
+          const res = await fetch(`http://localhost:5000/api/rooms/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedData)
+          });
+          if (res.ok) {
+            console.log("✓ Room updated in backend database.json");
+          }
+        } catch (err) {
+          console.log("Server offline, saving locally...");
+        }
+
+        // 3. Sync to localStorage
+        let rooms = getStoredRooms();
+        const idx = rooms.findIndex(r => r.id === id);
+        if (idx !== -1) {
+          rooms[idx] = { ...rooms[idx], ...updatedData };
+          localStorage.setItem('hp_rooms', JSON.stringify(rooms));
+        }
+
+        closeEditModal();
+        alert(`Room "${name}" has been updated successfully!`);
+        await loadAdminData();
+      } catch (err) {
+        alert("Error saving room changes: " + err.message);
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Save Room Changes";
+        }
+      }
+    }
+
+    async function updateStatus(id, newStatus) {
+      // 1. Try Supabase Cloud Database first
+      const sb = getSupabaseClient();
+      if (sb) {
+        try {
+          await sb.from("bookings").update({ status: newStatus }).eq("id", id);
+          console.log("✓ Status updated in Supabase Cloud!");
+        } catch (sbErr) {
+          console.warn("Supabase status error:", sbErr.message);
+        }
+      }
+
+      // 2. Backend REST API
+      try {
+        await fetch(`http://localhost:5000/api/bookings/${id}/status`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus })
+        });
+      } catch (err) {
+        console.log("Server offline, updating local state...");
+      }
+
+      const allBookings = getStoredBookings();
+      const b = allBookings.find(x => x.id === id);
+      if (b) {
+        b.status = newStatus;
+        localStorage.setItem('hp_bookings', JSON.stringify(allBookings));
+      }
+      loadAdminData();
+    }
+
+    async function deleteRoom(id) {
+      if (!confirm("Are you sure you want to remove this room from the site?")) return;
+
+      // 1. Try Supabase Cloud Database first
+      const sb = getSupabaseClient();
+      if (sb) {
+        try {
+          await sb.from("rooms").delete().eq("room_id", id);
+          console.log("✓ Room deleted from Supabase Cloud!");
+        } catch (sbErr) {
+          console.warn("Supabase delete error:", sbErr.message);
+        }
+      }
+
+      // 2. Backend REST API
+      try {
+        await fetch(`http://localhost:5000/api/rooms/${id}`, { method: "DELETE" });
+      } catch (err) {
+        console.log("Server offline, removing locally...");
+      }
+
+      let rooms = getStoredRooms();
+      rooms = rooms.filter(r => r.id !== id);
+      localStorage.setItem('hp_rooms', JSON.stringify(rooms));
+      currentAdminRooms = rooms;
+      await loadAdminData();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadAdminData();
+    });
+  </script>
+</body>
+</html>

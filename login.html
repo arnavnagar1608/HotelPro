@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Register - HotelPro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a class="brand" href="index.html">HotelPro<span>.</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#rooms">Rooms</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Auth Card Container -->
+  <main class="auth-page">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <div class="auth-alert error" id="alertError"></div>
+      <div class="auth-alert success" id="alertSuccess"></div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+        <label>
+          Email Address
+          <input type="email" id="loginEmail" placeholder="yourname@gmail.com" required>
+        </label>
+        <label>
+          Password
+          <input type="password" id="loginPassword" placeholder="Enter password" required>
+        </label>
+        <button class="auth-btn" type="submit">Sign In to HotelPro</button>
+        <p style="font-size:12px;color:#777;text-align:center;margin-top:10px;">
+          Demo Admin: <strong>admin@hotelpro.com</strong> / <strong>adminpassword</strong>
+        </p>
+      </form>
+
+      <!-- Register Form -->
+      <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)" style="display:none;">
+        <label>
+          Full Name
+          <input type="text" id="regName" placeholder="Rajat Yadav" required>
+        </label>
+        <label>
+          Email Address
+          <input type="email" id="regEmail" placeholder="yourname@gmail.com" required>
+        </label>
+        <label>
+          Password
+          <input type="password" id="regPassword" placeholder="Create a password" required minlength="6">
+        </label>
+        <label>
+          Account Role
+          <select id="regRole" style="padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+            <option value="customer">Customer (Guest)</option>
+            <option value="admin">Hotel Manager / Admin</option>
+          </select>
+        </label>
+        <button class="auth-btn" type="submit">Create Account</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Supabase Cloud Database Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseConfig.js"></script>
+
+  <script src="app.js"></script>
+  <script>
+    function switchTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tabLogin').classList.toggle('active', isLogin);
+      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+      document.getElementById('loginForm').style.display = isLogin ? 'flex' : 'none';
+      document.getElementById('registerForm').style.display = isLogin ? 'none' : 'flex';
+      hideAlerts();
+    }
+
+    function showAlert(type, msg) {
+      hideAlerts();
+      const el = document.getElementById(type === 'error' ? 'alertError' : 'alertSuccess');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function hideAlerts() {
+      document.getElementById('alertError').style.display = 'none';
+      document.getElementById('alertSuccess').style.display = 'none';
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('loginPassword').value;
+
+      let user = null;
+
+      // 1. Try Supabase Cloud Database first
+      const sb = getSupabaseClient();
+      if (sb) {
+        try {
+          const { data, error } = await sb
+            .from("users")
+            .select("*")
+            .eq("email", email)
+            .eq("password", password)
+            .maybeSingle();
+          if (!error && data) {
+            user = { name: data.name, email: data.email, role: data.role };
+            console.log("✓ Authenticated via Supabase Cloud Database!");
+          }
+        } catch (sbErr) {
+          console.warn("Supabase query error:", sbErr.message);
+        }
+      }
+
+      // 2. Try backend server REST API
+      if (!user) {
+        try {
+          const res = await fetch("http://localhost:5000/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            user = data.user;
+            console.log("✓ Authenticated via Backend REST API (server.js)");
+          }
+        } catch (err) {
+          console.log("Backend offline, checking local storage...");
+        }
+      }
+
+      // 3. Fallback to localStorage
+      if (!user) {
+        const users = getStoredUsers();
+        user = users.find(u => u.email.toLowerCase() === email && u.password === password);
+      }
+
+      if (!user) {
+        showAlert('error', 'Invalid email or password. Please try again.');
+        return;
+      }
+
+      localStorage.setItem('hp_active_user', JSON.stringify({
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }));
+
+      showAlert('success', 'Login successful! Redirecting...');
+      setTimeout(() => {
+        window.location.href = user.role === 'admin' ? 'admin.html' : 'index.html';
+      }, 700);
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+      const password = document.getElementById('regPassword').value;
+      const role = document.getElementById('regRole').value;
+
+      if (!name || !email || !password) {
+        showAlert('error', 'Please fill in all required fields.');
+        return;
+      }
+
+      // Check if user already exists
+      const users = getStoredUsers();
+      if (users.some(u => u.email.toLowerCase() === email)) {
+        showAlert('error', 'An account with this email already exists. Please sign in.');
+        return;
+      }
+
+      // 1. Try Supabase Cloud Database first
+      const sb = getSupabaseClient();
+      if (sb) {
+        try {
+          const { error } = await sb.from("users").insert([
+            { name, email, password, role }
+          ]);
+          if (!error) {
+            console.log("✓ User registered into Supabase Cloud 'users' table!");
+          }
+        } catch (sbErr) {
+          console.warn("Supabase register error:", sbErr.message);
+        }
+      }
+
+      // 2. Try backend server REST API
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password, role })
+        });
+        if (res.ok) {
+          console.log("✓ User registered in Backend Database (database.json)");
+        }
+      } catch (err) {
+        console.log("Backend offline, saving to localStorage...");
+      }
+
+      // 3. Sync with localStorage
+      users.push({ name, email, password, role });
+      localStorage.setItem('hp_users', JSON.stringify(users));
+
+      showAlert('success', 'Account registered successfully! Please sign in.');
+      setTimeout(() => switchTab('login'), 900);
+    }
+  </script>
+</body>
+</html>
+

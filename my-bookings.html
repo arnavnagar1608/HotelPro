@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings - HotelPro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a class="brand" href="index.html">HotelPro<span>.</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#rooms">Our Rooms</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div id="navAuthContainer"></div>
+  </nav>
+
+  <main class="page-container">
+    <div class="page-header">
+      <span class="eyebrow">CUSTOMER PORTAL</span>
+      <h1>My Reservations</h1>
+      <p style="color:#666;">View your booking history and manage upcoming stays.</p>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Room</th>
+            <th>Guest</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Nights</th>
+            <th>Total Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="bookingsTableBody">
+          <!-- Populated by script -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="noBookingsMsg" style="text-align:center;padding:50px 20px;display:none;">
+      <h3 style="font-family:var(--font-serif);margin-bottom:10px;">No reservations found</h3>
+      <p style="color:#777;margin-bottom:20px;">You haven't booked any rooms yet.</p>
+      <a href="index.html#rooms" class="primary-button">Browse Available Rooms →</a>
+    </div>
+  </main>
+
+  <!-- Supabase Cloud Database Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseConfig.js"></script>
+
+  <!-- Master JavaScript Controller -->
+  <script src="app.js"></script>
+  <script>
+    async function loadUserBookings() {
+      const user = getCurrentUser();
+      let allBookings = [];
+
+      // 1. Try Supabase Cloud Database first
+      const sb = getSupabaseClient();
+      if (sb) {
+        try {
+          const { data, error } = await sb.from("bookings").select("*").order("created_at", { ascending: false });
+          if (!error && data && data.length > 0) {
+            allBookings = data.map(b => ({
+              id: b.id,
+              roomName: b.room_name || b.roomName,
+              guestName: b.guest_name || b.guestName,
+              guestEmail: b.guest_email || b.guestEmail,
+              userId: b.user_id || b.userId || b.guest_email,
+              checkIn: b.check_in || b.checkIn,
+              checkOut: b.check_out || b.checkOut,
+              nights: b.nights,
+              totalPrice: b.total_price || b.totalPrice,
+              status: b.status
+            }));
+            localStorage.setItem('hp_bookings', JSON.stringify(allBookings));
+            console.log("✓ Bookings loaded from Supabase Cloud PostgreSQL!");
+          }
+        } catch (sbErr) {
+          console.warn("Supabase bookings fetch error:", sbErr.message);
+        }
+      }
+
+      // 2. Try fetching from Backend Server API
+      if (allBookings.length === 0) {
+        try {
+          const res = await fetch("http://localhost:5000/api/bookings");
+          if (res.ok) {
+            allBookings = await res.json();
+            localStorage.setItem('hp_bookings', JSON.stringify(allBookings));
+            console.log("✓ Bookings loaded from Backend Database (database.json)");
+          }
+        } catch (err) {
+          console.log("Backend offline, loading bookings from localStorage...");
+        }
+      }
+
+      // 3. Fallback and bidirectional merge with localStorage
+      const localBookings = getStoredBookings();
+      const bookingMap = new Map();
+      localBookings.forEach(b => { if (b && b.id) bookingMap.set(b.id, b); });
+      allBookings.forEach(b => { if (b && b.id) bookingMap.set(b.id, b); });
+      allBookings = Array.from(bookingMap.values());
+      
+      // Filter bookings for logged-in user or show all demo bookings if guest
+      const userBookings = user 
+        ? allBookings.filter(b => b.userId === user.email || b.guestEmail === user.email)
+        : allBookings;
+
+      const tbody = document.getElementById('bookingsTableBody');
+      const emptyMsg = document.getElementById('noBookingsMsg');
+
+      if (userBookings.length === 0) {
+        tbody.innerHTML = '';
+        emptyMsg.style.display = 'block';
+        return;
+      }
+
+      emptyMsg.style.display = 'none';
+      tbody.innerHTML = userBookings.map(b => `
+        <tr>
+          <td><strong>${b.id}</strong></td>
+          <td><strong>${b.roomName}</strong></td>
+          <td>${b.guestName}</td>
+          <td>${b.checkIn}</td>
+          <td>${b.checkOut}</td>
+          <td>${b.nights}</td>
+          <td><strong>₹${Number(b.totalPrice).toLocaleString('en-IN')}</strong></td>
+          <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+          <td>
+            ${b.status !== 'cancelled' ? `
+              <button class="action-btn-danger" onclick="cancelReservation('${b.id}')">Cancel</button>
+            ` : '<span style="color:#aaa;font-size:12px;">Cancelled</span>'}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function cancelReservation(id) {
+      if (!confirm("Are you sure you want to cancel this reservation?")) return;
+
+      // 1. Try Supabase Cloud Database first
+      const sb = getSupabaseClient();
+      if (sb) {
+        try {
+          await sb.from("bookings").update({ status: "cancelled" }).eq("id", id);
+          console.log("✓ Reservation cancelled in Supabase Cloud PostgreSQL!");
+        } catch (sbErr) {
+          console.warn("Supabase cancel error:", sbErr.message);
+        }
+      }
+
+      // 2. Send update to Backend Server API
+      try {
+        await fetch(`http://localhost:5000/api/bookings/${id}/status`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: "cancelled" })
+        });
+        console.log("✓ Booking cancelled in Backend Database (database.json)");
+      } catch (err) {
+        console.log("Backend offline, updating locally...");
+      }
+
+      // 3. Sync to localStorage
+      const allBookings = getStoredBookings();
+      const index = allBookings.findIndex(b => b.id === id);
+      if (index !== -1) {
+        allBookings[index].status = 'cancelled';
+        localStorage.setItem('hp_bookings', JSON.stringify(allBookings));
+      }
+      loadUserBookings();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadUserBookings();
+    });
+  </script>
+</body>
+</html>
+

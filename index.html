@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HotelPro - Luxury Hotel & Room Reservations</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a class="brand" href="index.html">HotelPro<span>.</span></a>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#rooms">Our Rooms</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div id="navAuthContainer">
+      <a class="nav-button" href="login.html">Login / Register</a>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="hero" id="home">
+    <div class="hero-content">
+      <span class="eyebrow">WELCOME TO HOTELPRO</span>
+      <h1>Your comfort.<br>Our priority.</h1>
+      <p class="hero-text">Discover thoughtfully designed rooms, warm hospitality, and a stay worth remembering across
+        our prime Indore locations.</p>
+      <a class="primary-button" href="#rooms">Explore Our Rooms →</a>
+    </div>
+  </header>
+
+  <!-- Search Filter Form -->
+  <section class="search-section">
+    <form class="search-form" id="searchForm">
+      <label>
+        CHECK-IN
+        <input type="date" id="searchCheckIn" required>
+      </label>
+      <label>
+        CHECK-OUT
+        <input type="date" id="searchCheckOut" required>
+      </label>
+      <label>
+        GUESTS
+        <select id="searchGuests">
+          <option value="1">1 Guest</option>
+          <option value="2" selected>2 Guests</option>
+          <option value="3">3 Guests</option>
+          <option value="4">4 Guests</option>
+        </select>
+      </label>
+      <button class="search-button" type="submit">Find a Room</button>
+    </form>
+  </section>
+
+  <!-- Hotel Rooms Grid Section -->
+  <section class="rooms-section" id="rooms">
+    <div class="section-heading">
+      <span class="eyebrow">STAY YOUR WAY</span>
+      <h2>Rooms Designed For You</h2>
+      <p>Find the perfect space for your next getaway, corporate visit, or family vacation.</p>
+    </div>
+
+    <div class="room-grid" id="roomGrid">
+      <!-- 5 Rooms are dynamically rendered here by app.js -->
+    </div>
+  </section>
+
+  <!-- Interactive Booking Modal Form -->
+  <div class="booking-overlay" id="bookingOverlay">
+    <div class="booking-modal" role="dialog" aria-modal="true">
+      <button class="booking-close" type="button" onclick="closeBookingModal()" aria-label="Close">×</button>
+      <span class="eyebrow">RESERVE YOUR STAY</span>
+      <h2 id="modalRoomTitle">Room Details</h2>
+      <p class="modal-room-price" id="modalRoomPrice">₹0 per night</p>
+
+      <!-- Included Amenities in Modal -->
+      <div class="modal-amenities-box" id="modalRoomAmenities"></div>
+
+      <form class="booking-form" id="bookingForm">
+        <label>
+          Check-in Date
+          <input type="date" id="modalCheckIn" required>
+        </label>
+        <label>
+          Check-out Date
+          <input type="date" id="modalCheckOut" required>
+        </label>
+        <label>
+          Guests
+          <select id="modalGuests">
+            <option value="1">1 Guest</option>
+            <option value="2" selected>2 Guests</option>
+            <option value="3">3 Guests</option>
+            <option value="4">4 Guests</option>
+          </select>
+        </label>
+        <label>
+          Guest Full Name
+          <input type="text" id="modalGuestName" placeholder="Enter full name" required>
+        </label>
+        <label>
+          Guest Email
+          <input type="email" id="modalGuestEmail" placeholder="name@example.com" required>
+        </label>
+
+        <div class="booking-total-box" id="modalTotalBox">
+          Select dates to calculate total.
+        </div>
+
+        <button class="booking-submit" type="submit">Confirm & Book Room</button>
+        <p class="booking-note">Demo Project: Your reservation will be saved immediately to your account.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Quick Edit Room Modal -->
+  <div class="booking-overlay" id="homeEditRoomModal">
+    <div class="booking-modal" style="max-width:540px;">
+      <button class="booking-close" type="button" onclick="closeHomeEditModal()">×</button>
+      <span class="eyebrow">HOTEL MANAGEMENT (ADMIN)</span>
+      <h2 id="homeEditModalTitle">Edit Hotel Room</h2>
+      <p style="font-size:13px;color:#666;margin-bottom:15px;">Make changes to this room and save them directly to the
+        database:</p>
+
+      <form id="homeEditRoomForm" onsubmit="handleSaveHomeEditRoom(event)">
+        <input type="hidden" id="homeEditRoomId">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <label style="font-size:12px;font-weight:700;">
+            Room Name
+            <input type="text" id="homeEditRoomName" required
+              style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+          </label>
+          <label style="font-size:12px;font-weight:700;">
+            Price per Night (₹)
+            <input type="number" id="homeEditRoomPrice" required min="100"
+              style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+          </label>
+          <label style="font-size:12px;font-weight:700;">
+            Image URL
+            <input type="url" id="homeEditRoomImage" required
+              style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;"
+              oninput="document.getElementById('homeEditImagePreview').src = this.value">
+          </label>
+          <div>
+            <span style="font-size:11px;font-weight:700;color:#666;">PHOTO PREVIEW:</span>
+            <img id="homeEditImagePreview" src="" alt="Preview"
+              style="width:100%;height:130px;object-fit:cover;border-radius:4px;margin-top:4px;border:1px solid #eee;display:block;">
+          </div>
+          <label style="font-size:12px;font-weight:700;">
+            Description
+            <textarea id="homeEditRoomDesc" rows="3" required
+              style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;"></textarea>
+          </label>
+          <label style="font-size:12px;font-weight:700;">
+            Included Amenities (separated by commas)
+            <input type="text" id="homeEditRoomAmenities"
+              placeholder="📶 Free Wi-Fi, 💡 Power Backup, 🅿️ Free Parking, 🍽️ Restaurant Nearby, 💧 Hot Water, ❄️ AC"
+              style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font:inherit;">
+          </label>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button type="submit" class="primary-button" style="flex:1;">Save Room Changes</button>
+            <button type="button" onclick="closeHomeEditModal()" class="action-btn-danger"
+              style="padding:10px 18px;">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Guest & Resident Reviews Section -->
+  <section class="reviews-section" id="reviews">
+    <div class="section-heading">
+      <span class="eyebrow">VERIFIED RESIDENT EXPERIENCES</span>
+      <h2>What Our Residents Say</h2>
+      <p>Real reviews from working professionals and students staying across our Indore properties.</p>
+    </div>
+
+    <div class="reviews-grid">
+      <!-- Review 1 -->
+      <article class="homepage-review-card">
+        <div>
+          <div class="review-card-stars">⭐⭐⭐⭐⭐</div>
+          <p class="review-card-quote">
+            "Excellent room — clean, well-lit, and fully furnished. The CCTV security and 24/7 backup make me feel very
+            safe. Management is quick to resolve any issues. Highly recommend!"
+          </p>
+        </div>
+        <div class="review-card-author">
+          <div class="review-author-avatar">A</div>
+          <div class="review-author-info">
+            <strong>Ankit Sharma</strong>
+            <span>Resident · Pardesipura Branch</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Review 2 -->
+      <article class="homepage-review-card">
+        <div>
+          <div class="review-card-stars">⭐⭐⭐⭐⭐</div>
+          <p class="review-card-quote">
+            "Best PG and stay experience in Indore. RO purified water is always available, housekeeping is regular, and
+            the location is perfect for commuting to Pardesipura IT Park."
+          </p>
+        </div>
+        <div class="review-card-author">
+          <div class="review-author-avatar">S</div>
+          <div class="review-author-info">
+            <strong>Suresh Nair</strong>
+            <span>Resident · Ganesh Nagar Hub</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Review 3 -->
+      <article class="homepage-review-card">
+        <div>
+          <div class="review-card-stars">⭐⭐⭐⭐½</div>
+          <p class="review-card-quote">
+            "Spacious double room with personal cupboards, high-speed Wi-Fi that never drops during office calls, and
+            electricity charges included. Best value for money."
+          </p>
+        </div>
+        <div class="review-card-author">
+          <div class="review-author-avatar">M</div>
+          <div class="review-author-info">
+            <strong>Manisha Gupta</strong>
+            <span>Resident · Lemon City Branch</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Frequently Asked Questions (FAQ) Section -->
+  <section class="faq-section" id="faq">
+    <div class="section-heading">
+      <span class="eyebrow">HELP & CLARIFICATIONS</span>
+      <h2>Frequently Asked Questions</h2>
+      <p>Everything you need to know about booking, amenities, house rules, and facilities.</p>
+    </div>
+
+    <div class="faq-accordion">
+      <div class="faq-item active">
+        <button class="faq-question" type="button" onclick="toggleFaq(this)">
+          <span>Are electricity and water charges included in the rent?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Yes! All listed room prices include electricity, 24/7 running water, hot water, and RO purified drinking
+          water. There are no surprise monthly utility charges.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFaq(this)">
+          <span>What documents are required for check-in or visit?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          You only need one government-issued photo ID (Aadhar Card, Passport, or Voter ID) and student/work
+          verification for long-term PG residents.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFaq(this)">
+          <span>What are the visitor hours and main gate timings?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          For security and peaceful living, daytime visitors are welcome until 10:00 PM. Night silence hours start at
+          11:00 PM across all residential floors.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFaq(this)">
+          <span>Is high-speed Wi-Fi and power backup provided?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Yes, all rooms and common spaces have high-speed 5G Wi-Fi with uninterrupted 24/7 power backup for lights,
+          fans, and work stations.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFaq(this)">
+          <span>Are food, mess, or dining options available nearby?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          All our locations (Pardesipura & Lemon City) are situated within 2-5 minutes of hygienic student messes,
+          tiffin services, cafes, and restaurants.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFaq(this)">
+          <span>Can I schedule a physical visit before booking?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Absolutely! Click "Book a Visit" on any room or call our team directly at +91 9826705696 to schedule a
+          walkthrough at your preferred time.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Locations & Google Maps Section -->
+  <section class="contact-section" id="contact">
+    <div class="section-heading">
+      <span class="eyebrow">GET IN TOUCH & VISIT US</span>
+      <h2>Contact & Our Locations</h2>
+      <p>Reach out for reservations, inquiries, or visit any of our prime locations in Indore.</p>
+    </div>
+
+    <div class="contact-container">
+      <!-- Left Column: Direct Contacts + 3 Locations -->
+      <div class="contact-info-col">
+        <div class="contact-cards">
+          <a href="tel:+919826705696" class="contact-card">
+            <span class="contact-icon">📞</span>
+            <div>
+              <span class="contact-card-label">CALL / WHATSAPP</span>
+              <strong>+91 9826705696</strong>
+            </div>
+          </a>
+
+          <a href="mailto:rajatyadav25009@gmail.com" class="contact-card">
+            <span class="contact-icon">📧</span>
+            <div>
+              <span class="contact-card-label">EMAIL US</span>
+              <strong>rajatyadav25009@gmail.com</strong>
+            </div>
+          </a>
+
+          <a href="https://www.instagram.com/ydv_raj_0143" target="_blank" rel="noopener noreferrer"
+            class="contact-card">
+            <span class="contact-icon">📸</span>
+            <div>
+              <span class="contact-card-label">INSTAGRAM</span>
+              <strong>@ydv_raj_0143</strong>
+            </div>
+          </a>
+        </div>
+
+        <div class="locations-wrapper">
+          <h3>Our Property Locations</h3>
+          <p class="locations-subtext">Click any location below to view it live on Google Maps:</p>
+          <div class="locations-list" id="locationsList">
+            <!-- 3 Locations are rendered here by app.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Google Maps Iframe -->
+      <div class="contact-map-col">
+        <div class="map-frame-wrapper">
+          <div class="map-header-bar">
+            <span>📍 <strong id="mapHeaderLabel">Location Map</strong></span>
+            <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" class="open-gmaps-link"
+              id="openGmapsLink">
+              Open in Google Maps ↗
+            </a>
+          </div>
+          <iframe id="gmapIframe" class="gmap-iframe" title="Google Maps Location"
+            src="https://maps.google.com/maps?q=Pardesipura+Indore&t=&z=15&ie=UTF8&iwloc=&output=embed" loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <a class="brand footer-brand" href="#home" style="color:white;">HotelPro<span>.</span></a>
+    <p>Premium hospitality & curated stays in Indore.</p>
+    <p class="footer-contact-line">
+      📞 <a href="tel:+919826705696">+91 9826705696</a> ·
+      📧 <a href="mailto:rajatyadav25009@gmail.com">rajatyadav25009@gmail.com</a> ·
+      📸 <a href="https://www.instagram.com/ydv_raj_0143" target="_blank" rel="noopener noreferrer">@ydv_raj_0143</a>
+    </p>
+    <p>© 2026 HotelPro. All rights reserved.</p>
+  </footer>
+
+  <!-- Supabase Cloud Database Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseConfig.js"></script>
+
+  <!-- Master JavaScript Controller -->
+  <script src="app.js"></script>
+</body>
+
+</html>

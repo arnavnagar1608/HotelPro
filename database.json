@@ -1,0 +1,110 @@
+{
+  "rooms": [
+    {
+      "id": 1,
+      "name": "Deluxe King Room",
+      "price": 2800,
+      "description": "Spacious room featuring a plush king-sized bed, city skyline view, workstation, and marble ensuite bathroom.",
+      "image": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800",
+      "amenities": [
+        "📶 High-Speed Wi-Fi",
+        "💡 24/7 Power & Light Backup",
+        "🅿️ Free On-Site Parking",
+        "🍽️ Restaurants Nearby",
+        "💧 24/7 Hot & Cold Water",
+        "❄️ Air Conditioning"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Executive Luxury Suite",
+      "price": 5500,
+      "description": "Opulent suite with a separate master bedroom, elegant living lounge, mini-bar, and panoramic city vistas.",
+      "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+      "amenities": [
+        "📶 Ultra-Fast 5G Wi-Fi",
+        "💡 24/7 Power & Light Backup",
+        "🅿️ Valet & Reserved Parking",
+        "🍽️ In-House Dining & Cafes Nearby",
+        "💧 24/7 RO & Hot Water",
+        "❄️ Central Climate Control"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Family Garden Haven",
+      "price": 4200,
+      "description": "Generously sized family room equipped with two queen beds, garden patio access, and kid-friendly amenities.",
+      "image": "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
+      "amenities": [
+        "📶 High-Speed Wi-Fi",
+        "💡 24/7 Power & Light Backup",
+        "🅿️ Spacious Family Parking",
+        "🍽️ Family Restaurants Nearby",
+        "💧 24/7 Hot & Purified Water",
+        "🌿 Private Garden Patio"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Ocean Vista Penthouse",
+      "price": 8500,
+      "description": "Top-floor penthouse with breathtaking ocean panorama, private jacuzzi terrace, and complimentary gourmet breakfast.",
+      "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800",
+      "amenities": [
+        "📶 Ultra-Fast Wi-Fi",
+        "💡 24/7 Power & Light Backup",
+        "🅿️ Reserved VIP Parking",
+        "🍽️ Rooftop Dining & Restaurants Nearby",
+        "💧 Jacuzzi & 24/7 Hot Water",
+        "❄️ Premium Climate Control"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Cozy Studio Single",
+      "price": 1800,
+      "description": "Modern, streamlined room perfect for solo travelers and business professionals needing quiet comfort and fast Wi-Fi.",
+      "image": "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800",
+      "amenities": [
+        "📶 High-Speed Wi-Fi",
+        "💡 24/7 Power & Light Backup",
+        "🅿️ Two-Wheeler & Car Parking",
+        "🍽️ Food Joints & Cafes Nearby",
+        "💧 24/7 Running Hot & Cold Water",
+        "💻 Dedicated Work Desk"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "name": "Hotel Admin",
+      "email": "admin@hotelpro.com",
+      "password": "adminpassword",
+      "role": "admin"
+    },
+    {
+      "name": "Rajat Yadav",
+      "email": "rajatyadav25009@gmail.com",
+      "password": "password123",
+      "role": "customer"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "BK-829103",
+      "roomId": 1,
+      "roomName": "Deluxe King Room",
+      "guestName": "Rajat Yadav",
+      "guestEmail": "rajatyadav25009@gmail.com",
+      "userId": "rajatyadav25009@gmail.com",
+      "checkIn": "2026-11-20",
+      "checkOut": "2026-11-22",
+      "guests": 2,
+      "nights": 2,
+      "totalPrice": 5600,
+      "status": "confirmed",
+      "createdAt": "2026-11-14T02:00:00.000Z"
+    }
+  ]
+}

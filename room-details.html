@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Details - HotelPro Indore</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a class="brand" href="index.html">HotelPro<span>.</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#rooms">Our Rooms</a>
+      <a href="index.html#reviews">Reviews</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div id="navAuthContainer">
+      <a class="nav-button" href="login.html">Login / Register</a>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="room-details-container">
+    <!-- Back Button -->
+    <a href="index.html#rooms" class="back-link">
+      <span>←</span> Back to All Rooms
+    </a>
+
+    <div class="room-details-grid">
+      <!-- Left Column: Media Gallery, Info, Amenities, Rules, Reviews -->
+      <div class="room-content-col">
+
+        <!-- 3-Image Photo Gallery Layout -->
+        <div class="room-gallery-3">
+          <div class="gallery-tall-box">
+            <img id="detailHeroImg" src="" alt="Room Balcony / Main View" loading="lazy">
+          </div>
+          <div class="gallery-sub-grid">
+            <img id="detailSubImg1" src="" alt="Room Interior & Furniture" loading="lazy">
+            <img id="detailSubImg2" src="" alt="Room Bed & Amenities" loading="lazy">
+          </div>
+        </div>
+
+        <!-- Room Meta Badges & Title -->
+        <div class="room-meta-badges">
+          <span class="badge-occupancy" id="detailOccupancyBadge">DOUBLE OCC.</span>
+          <span class="badge-available-dot">● Available</span>
+        </div>
+
+        <h1 class="room-details-title" id="detailRoomTitle">Double Comfort Room</h1>
+        <p class="room-details-desc" id="detailRoomDesc">
+          Spacious double-occupancy room ideal for two residents. Each resident gets their own bed and storage space.
+          The room is well-ventilated with natural light and equipped with all essential furnishings.
+        </p>
+
+        <!-- Included Amenities Section -->
+        <h3 class="section-subheading">
+          <span>☕</span> Amenities Included
+        </h3>
+        <div class="amenities-card-grid" id="detailAmenitiesGrid">
+          <div class="amenity-card-item"><span>📹</span> CCTV Security</div>
+          <div class="amenity-card-item"><span>💧</span> RO Water</div>
+          <div class="amenity-card-item"><span>🧹</span> Housekeeping</div>
+          <div class="amenity-card-item"><span>🪑</span> Furnished</div>
+          <div class="amenity-card-item"><span>📶</span> Wi-Fi</div>
+          <div class="amenity-card-item"><span>⚡</span> Electricity Included</div>
+          <div class="amenity-card-item"><span>🚰</span> Water Included</div>
+          <div class="amenity-card-item"><span>🅿️</span> Free Parking</div>
+        </div>
+
+        <!-- House Rules Section -->
+        <h3 class="section-subheading">
+          <span>📋</span> House Rules
+        </h3>
+        <div class="house-rules-list">
+          <div class="rule-item">
+            <span class="rule-icon">🕒</span>
+            <span>Guests must vacate by 10:00 PM</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🚭</span>
+            <span>No smoking inside the premises</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🍷</span>
+            <span>No alcohol on the property</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🔇</span>
+            <span>Maintain silence after 11:00 PM</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🧼</span>
+            <span>Keep your room and common areas clean</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🚰</span>
+            <span>Water usage during allotted timings only</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🔑</span>
+            <span>Inform management before extended absence</span>
+          </div>
+        </div>
+
+        <!-- Resident Reviews Section -->
+        <h3 class="section-subheading">
+          <span>💬</span> Resident Reviews
+        </h3>
+        <div class="reviews-list-container" id="residentReviewsList">
+          <!-- Review 1 -->
+          <article class="resident-review-card">
+            <div class="reviewer-header">
+              <div class="reviewer-avatar">A</div>
+              <div class="reviewer-info">
+                <strong>Ankit Sharma</strong>
+                <div class="reviewer-stars">⭐⭐⭐⭐⭐ <span>· March 2025</span></div>
+              </div>
+            </div>
+            <p class="review-content">
+              Excellent room — clean, well-lit, and fully furnished. The CCTV security makes me feel very safe.
+              Management is quick to resolve any issues. Highly recommend!
+            </p>
+          </article>
+
+          <!-- Review 2 -->
+          <article class="resident-review-card">
+            <div class="reviewer-header">
+              <div class="reviewer-avatar">S</div>
+              <div class="reviewer-info">
+                <strong>Suresh Nair</strong>
+                <div class="reviewer-stars">⭐⭐⭐⭐⭐ <span>· February 2025</span></div>
+              </div>
+            </div>
+            <p class="review-content">
+              Best PG experience in Indore. RO water is always available, housekeeping is regular, and the location is
+              perfect for commuting to Pardesipura IT Park.
+            </p>
+          </article>
+
+          <!-- Review 3 -->
+          <article class="resident-review-card">
+            <div class="reviewer-header">
+              <div class="reviewer-avatar">M</div>
+              <div class="reviewer-info">
+                <strong>Manisha Gupta</strong>
+                <div class="reviewer-stars">⭐⭐⭐⭐½ <span>· January 2025</span></div>
+              </div>
+            </div>
+            <p class="review-content">
+              Spacious cupboards, fast Wi-Fi connection for work from home, and peaceful environment. Great management
+              support by Rajat.
+            </p>
+          </article>
+        </div>
+
+        <!-- Add a Review Box -->
+        <div style="background:var(--bg-cream);border:1px solid var(--border-light);border-radius:8px;padding:22px;margin-top:25px;">
+          <h4 style="font-size:16px;font-family:var(--font-serif);margin-bottom:12px;color:var(--primary-color);">Leave a Review for this Room</h4>
+          <form id="addReviewForm" onsubmit="handleReviewSubmit(event)" style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <input type="text" id="reviewAuthor" placeholder="Your Full Name (e.g. Rahul Verma)" required style="padding:10px;border:1px solid var(--border-light);border-radius:4px;font:inherit;">
+              <select id="reviewRating" style="padding:10px;border:1px solid var(--border-light);border-radius:4px;font:inherit;">
+                <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐ (5 Stars - Excellent)</option>
+                <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (4 Stars - Very Good)</option>
+                <option value="⭐⭐⭐">⭐⭐⭐ (3 Stars - Average)</option>
+              </select>
+            </div>
+            <textarea id="reviewText" rows="2" placeholder="Share your experience staying in this room..." required style="padding:10px;border:1px solid var(--border-light);border-radius:4px;font:inherit;"></textarea>
+            <button type="submit" class="primary-button" style="align-self:flex-start;padding:9px 20px;font-size:13px;">Submit Review</button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Sticky Pricing Breakdown Card -->
+      <aside class="room-sidebar-col">
+        <div class="pricing-sticky-card">
+          <div class="pricing-header-amount" id="detailPriceHeading">₹2,500 – ₹3,500</div>
+          <p class="pricing-sublabel" id="detailPriceSublabel">per month, all utilities included</p>
+
+          <div class="breakdown-title">
+            <span>💰</span> Pricing Breakdown
+          </div>
+
+          <div class="pricing-breakdown-list" id="pricingBreakdownList">
+            <div class="breakdown-item">
+              <span>Single Occupancy</span>
+              <strong id="priceSingle">₹3,500/mo</strong>
+            </div>
+            <div class="breakdown-item">
+              <span>Double Occupancy</span>
+              <strong id="priceDouble">₹3,200/mo</strong>
+            </div>
+            <div class="breakdown-item">
+              <span>Triple Sharing</span>
+              <strong id="priceTriple">₹2,800/mo</strong>
+            </div>
+            <div class="breakdown-item">
+              <span>Budget Triple</span>
+              <strong id="priceBudget">₹2,500/mo</strong>
+            </div>
+          </div>
+
+          <!-- Utility Callout Alert -->
+          <div class="utility-callout">
+            <span class="check-icon">✓</span>
+            <div>Electricity & water charges are included in all room prices.</div>
+          </div>
+
+          <!-- Action Buttons -->
+          <button type="button" class="btn-book-visit" onclick="openBookingFromDetails()">
+            <span>📅</span> Book a Visit / Reserve Now
+          </button>
+
+          <a href="tel:+919826705696" class="btn-call-enquiry">
+            <span>📞</span> Call for Enquiry
+          </a>
+
+          <div class="pricing-card-footer">
+            <p>📍 Available at Pardesipura & Lemon City, Indore</p>
+            <p style="margin-top:4px;">💬 WhatsApp: <a href="https://wa.me/919826705696" target="_blank"
+                style="color:var(--primary-color);font-weight:700;">+91 9826705696</a></p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Interactive Booking Modal Form -->
+  <div class="booking-overlay" id="bookingOverlay">
+    <div class="booking-modal" role="dialog" aria-modal="true">
+      <button class="booking-close" type="button" onclick="closeBookingModal()" aria-label="Close">×</button>
+      <span class="eyebrow">RESERVE YOUR STAY</span>
+      <h2 id="modalRoomTitle">Room Details</h2>
+      <p class="modal-room-price" id="modalRoomPrice">₹0 per night</p>
+
+      <div class="modal-amenities-box" id="modalRoomAmenities"></div>
+
+      <form class="booking-form" id="bookingForm">
+        <label>
+          Check-in Date
+          <input type="date" id="modalCheckIn" required>
+        </label>
+        <label>
+          Check-out Date
+          <input type="date" id="modalCheckOut" required>
+        </label>
+        <label>
+          Occupancy / Guests
+          <select id="modalGuests">
+            <option value="1">Single Occupancy (1 Guest)</option>
+            <option value="2" selected>Double Occupancy (2 Guests)</option>
+            <option value="3">Triple Sharing (3 Guests)</option>
+            <option value="4">Family Suite (4 Guests)</option>
+          </select>
+        </label>
+        <label>
+          Guest Full Name
+          <input type="text" id="modalGuestName" placeholder="Enter full name" required>
+        </label>
+        <label>
+          Guest Email
+          <input type="email" id="modalGuestEmail" placeholder="name@example.com" required>
+        </label>
+
+        <div class="booking-total-box" id="modalTotalBox">
+          Select dates to calculate total.
+        </div>
+
+        <button class="booking-submit" type="submit">Confirm & Book Room</button>
+        <p class="booking-note">Demo Project: Your reservation is saved immediately across Supabase Cloud & Local Storage.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <a class="brand footer-brand" href="index.html" style="color:white;">HotelPro<span>.</span></a>
+    <p>Premium hospitality & curated stays in Indore.</p>
+    <p class="footer-contact-line">
+      📞 <a href="tel:+919826705696">+91 9826705696</a> ·
+      📧 <a href="mailto:rajatyadav25009@gmail.com">rajatyadav25009@gmail.com</a> ·
+      📸 <a href="https://www.instagram.com/ydv_raj_0143" target="_blank" rel="noopener noreferrer">@ydv_raj_0143</a>
+    </p>
+    <p>© 2026 HotelPro. All rights reserved.</p>
+  </footer>
+
+  <!-- Supabase Cloud Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseConfig.js"></script>
+
+  <!-- Master Logic Controller -->
+  <script src="app.js"></script>
+
+  <script>
+    let activeDetailRoom = null;
+
+    // Additional Curated Photos for 3-Image Gallery per room
+    const ROOM_GALLERIES = {
+      1: {
+        hero: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200",
+        sub1: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800",
+        sub2: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800",
+        badge: "DELUXE KING OCC.",
+        range: "₹2,800 – ₹3,800",
+        single: "₹3,800/mo",
+        double: "₹3,400/mo",
+        triple: "₹3,000/mo",
+        budget: "₹2,800/mo"
+      },
+      2: {
+        hero: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200",
+        sub1: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
+        sub2: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800",
+        badge: "EXECUTIVE LUXURY",
+        range: "₹4,500 – ₹5,500",
+        single: "₹5,500/mo",
+        double: "₹5,000/mo",
+        triple: "₹4,600/mo",
+        budget: "₹4,200/mo"
+      },
+      3: {
+        hero: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=1200",
+        sub1: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800",
+        sub2: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+        badge: "FAMILY OCC.",
+        range: "₹3,500 – ₹4,200",
+        single: "₹4,200/mo",
+        double: "₹3,800/mo",
+        triple: "₹3,400/mo",
+        budget: "₹3,000/mo"
+      },
+      4: {
+        hero: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1200",
+        sub1: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800",
+        sub2: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
+        badge: "PENTHOUSE SUITE",
+        range: "₹6,500 – ₹8,500",
+        single: "₹8,500/mo",
+        double: "₹7,800/mo",
+        triple: "₹7,000/mo",
+        budget: "₹6,500/mo"
+      },
+      5: {
+        hero: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=1200",
+        sub1: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800",
+        sub2: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+        badge: "SINGLE OCC.",
+        range: "₹1,800 – ₹2,500",
+        single: "₹2,500/mo",
+        double: "₹2,200/mo",
+        triple: "₹2,000/mo",
+        budget: "₹1,800/mo"
+      }
+    };
+
+    async function loadRoomDetails() {
+      const params = new URLSearchParams(window.location.search);
+      const roomId = Number(params.get('id')) || 1;
+
+      // 1. Try to load from Supabase or memory
+      let rooms = loadedRooms && loadedRooms.length > 0 ? loadedRooms : getStoredRooms();
+
+      // Find target room
+      let room = rooms.find(r => Number(r.id) === roomId);
+
+      // If not found in memory, try server API
+      if (!room) {
+        try {
+          const res = await fetch(`http://localhost:5000/api/rooms`);
+          if (res.ok) {
+            const data = await res.json();
+            room = data.find(r => Number(r.id) === roomId);
+          }
+        } catch (e) {
+          console.log("Server offline, using default room...");
+        }
+      }
+
+      if (!room && DEFAULT_ROOMS.length > 0) {
+        room = DEFAULT_ROOMS[0];
+      }
+
+      activeDetailRoom = room;
+
+      // Populate text & data
+      document.title = `${room.name} - HotelPro`;
+      document.getElementById('detailRoomTitle').textContent = room.name;
+      document.getElementById('detailRoomDesc').textContent = room.description;
+
+      const gallery = ROOM_GALLERIES[room.id] || {
+        hero: room.image,
+        sub1: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+        sub2: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
+        badge: "AVAILABLE OCC.",
+        range: `₹${Number(room.price - 300).toLocaleString('en-IN')} – ₹${Number(room.price + 500).toLocaleString('en-IN')}`,
+        single: `₹${Number(room.price + 500).toLocaleString('en-IN')}/mo`,
+        double: `₹${Number(room.price).toLocaleString('en-IN')}/mo`,
+        triple: `₹${Number(room.price - 400).toLocaleString('en-IN')}/mo`,
+        budget: `₹${Number(room.price - 600).toLocaleString('en-IN')}/mo`
+      };
+
+      // Set Gallery Images
+      document.getElementById('detailHeroImg').src = gallery.hero || room.image;
+      document.getElementById('detailSubImg1').src = gallery.sub1 || room.image;
+      document.getElementById('detailSubImg2').src = gallery.sub2 || room.image;
+
+      // Set Badges
+      document.getElementById('detailOccupancyBadge').textContent = gallery.badge;
+
+      // Set Pricing
+      document.getElementById('detailPriceHeading').textContent = gallery.range;
+      document.getElementById('priceSingle').textContent = gallery.single;
+      document.getElementById('priceDouble').textContent = gallery.double;
+      document.getElementById('priceTriple').textContent = gallery.triple;
+      document.getElementById('priceBudget').textContent = gallery.budget;
+
+      // Populate Amenities Grid
+      const amenitiesGrid = document.getElementById('detailAmenitiesGrid');
+      const amenitiesList = (room.amenities && Array.isArray(room.amenities) && room.amenities.length > 0)
+        ? room.amenities
+        : [
+            "📹 CCTV Security",
+            "💧 RO Water",
+            "🧹 Housekeeping",
+            "🪑 Furnished",
+            "📶 Wi-Fi",
+            "⚡ Electricity Included",
+            "🚰 Water Included",
+            "🅿️ Free Parking"
+          ];
+
+      amenitiesGrid.innerHTML = amenitiesList.map(a => {
+        let icon = "✓";
+        if (a.includes("Wi-Fi")) icon = "📶";
+        else if (a.includes("CCTV")) icon = "📹";
+        else if (a.includes("RO") || a.includes("Water")) icon = "💧";
+        else if (a.includes("Housekeeping")) icon = "🧹";
+        else if (a.includes("Furnished")) icon = "🪑";
+        else if (a.includes("Electricity") || a.includes("Power")) icon = "💡";
+        else if (a.includes("Parking")) icon = "🅿️";
+        else if (a.includes("AC") || a.includes("Air")) icon = "❄️";
+        else if (a.includes("Restaurant") || a.includes("Food")) icon = "🍽️";
+
+        const cleanLabel = a.replace(/^[^\w\s]+/, '').trim();
+        return `<div class="amenity-card-item"><span>${icon}</span> ${cleanLabel || a}</div>`;
+      }).join('');
+    }
+
+    function openBookingFromDetails() {
+      if (!activeDetailRoom) {
+        const rooms = (loadedRooms && loadedRooms.length > 0) ? loadedRooms : getStoredRooms();
+        activeDetailRoom = rooms[0] || DEFAULT_ROOMS[0];
+      }
+      openBookingModal(activeDetailRoom);
+    }
+
+    function handleReviewSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById("reviewAuthor").value.trim();
+      const stars = document.getElementById("reviewRating").value;
+      const text = document.getElementById("reviewText").value.trim();
+      if (!name || !text) return;
+
+      const initial = name.charAt(0).toUpperCase();
+      const newCard = document.createElement("article");
+      newCard.className = "resident-review-card";
+      newCard.innerHTML = `
+        <div class="reviewer-header">
+          <div class="reviewer-avatar">${initial}</div>
+          <div class="reviewer-info">
+            <strong>${name}</strong>
+            <div class="reviewer-stars">${stars} <span>· Just now (Verified Resident)</span></div>
+          </div>
+        </div>
+        <p class="review-content">${text}</p>
+      `;
+
+      const container = document.getElementById("residentReviewsList");
+      container.insertBefore(newCard, container.firstChild);
+      document.getElementById("addReviewForm").reset();
+      alert("Thank you, " + name + "! Your review has been added.");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadRoomDetails();
+    });
+  </script>
+</body>
+</html>
