@@ -26,78 +26,107 @@ const SEED_DATA = {
   rooms: [
     {
       id: 1,
-      name: "Deluxe King Room",
-      price: 2800,
-      description: "Spacious room featuring a plush king-sized bed, city skyline view, workstation, and marble ensuite bathroom.",
-      image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800",
-      amenities: [
-        "📶 High-Speed Wi-Fi",
-        "💡 24/7 Power & Light Backup",
-        "🅿️ Free On-Site Parking",
-        "🍽️ Restaurants Nearby",
-        "💧 24/7 Hot & Cold Water",
-        "❄️ Air Conditioning"
-      ]
+      name: "Cozy Single Suite",
+      price: 3500,
+      type: "single",
+      occupancy: "SINGLE OCC.",
+      location: "Pardesipura",
+      rating: 5.0,
+      reviewsCount: 12,
+      description: "Private furnished single room with dedicated work desk, high-speed Wi-Fi, wall storage racks, and complete privacy for students and working professionals.",
+      image: "images/room-doorway-2.jpg",
+      amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Electricity Included"]
     },
     {
       id: 2,
-      name: "Executive Luxury Suite",
-      price: 5500,
-      description: "Opulent suite with a separate master bedroom, elegant living lounge, mini-bar, and panoramic city vistas.",
-      image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
-      amenities: [
-        "📶 Ultra-Fast 5G Wi-Fi",
-        "💡 24/7 Power & Light Backup",
-        "🅿️ Valet & Reserved Parking",
-        "🍽️ In-House Dining & Cafes Nearby",
-        "💧 24/7 RO & Hot Water",
-        "❄️ Central Climate Control"
-      ]
+      name: "Double Comfort Room",
+      price: 3200,
+      type: "double",
+      occupancy: "DOUBLE OCC.",
+      location: "Pardesipura",
+      rating: 4.8,
+      reviewsCount: 9,
+      description: "Spacious double-occupancy room ideal for two residents. Each resident gets their own bed and storage space. Well-ventilated with natural light.",
+      image: "images/room-double-3.jpg",
+      amenities: ["Wi-Fi", "CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
     },
     {
       id: 3,
-      name: "Family Garden Haven",
-      price: 4200,
-      description: "Generously sized family room equipped with two queen beds, garden patio access, and kid-friendly amenities.",
-      image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
-      amenities: [
-        "📶 High-Speed Wi-Fi",
-        "💡 24/7 Power & Light Backup",
-        "🅿️ Spacious Family Parking",
-        "🍽️ Family Restaurants Nearby",
-        "💧 24/7 Hot & Purified Water",
-        "🌿 Private Garden Patio"
-      ]
+      name: "Triple Sharing Room",
+      price: 2800,
+      type: "triple",
+      occupancy: "TRIPLE OCC.",
+      location: "Pardesipura",
+      rating: 4.7,
+      reviewsCount: 15,
+      description: "Affordable triple sharing setup with individual storage racks, shared desk, regular housekeeping, and 24/7 water supply.",
+      image: "images/room-single-1.jpg",
+      amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Water Included"]
     },
     {
       id: 4,
-      name: "Ocean Vista Penthouse",
-      price: 8500,
-      description: "Top-floor penthouse with breathtaking ocean panorama, private jacuzzi terrace, and complimentary gourmet breakfast.",
-      image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800",
-      amenities: [
-        "📶 Ultra-Fast Wi-Fi",
-        "💡 24/7 Power & Light Backup",
-        "🅿️ Reserved VIP Parking",
-        "🍽️ Rooftop Dining & Restaurants Nearby",
-        "💧 Jacuzzi & 24/7 Hot Water",
-        "❄️ Premium Climate Control"
-      ]
+      name: "Budget Triple Room",
+      price: 2500,
+      type: "budget",
+      occupancy: "BUDGET OCC.",
+      location: "Pardesipura",
+      rating: 4.5,
+      reviewsCount: 20,
+      description: "Economical budget triple sharing room with clean surroundings, RO water, security cameras, and electricity included.",
+      image: "images/room-shelves.jpg",
+      amenities: ["CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
     },
     {
       id: 5,
-      name: "Cozy Studio Single",
-      price: 1800,
-      description: "Modern, streamlined room perfect for solo travelers and business professionals needing quiet comfort and fast Wi-Fi.",
-      image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800",
-      amenities: [
-        "📶 High-Speed Wi-Fi",
-        "💡 24/7 Power & Light Backup",
-        "🅿️ Two-Wheeler & Car Parking",
-        "🍽️ Food Joints & Cafes Nearby",
-        "💧 24/7 Running Hot & Cold Water",
-        "💻 Dedicated Work Desk"
-      ]
+      name: "Premium Single Room",
+      price: 3500,
+      type: "single",
+      occupancy: "SINGLE OCC.",
+      location: "Near Aurobindo",
+      rating: 5.0,
+      reviewsCount: 8,
+      description: "Quiet and comfortable single room near Aurobindo Hospital / College, equipped with desk shelves, high-speed Wi-Fi, and 24/7 power backup.",
+      image: "images/room-study-4.jpg",
+      amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Electricity Included"]
+    },
+    {
+      id: 6,
+      name: "Deluxe Double Occupancy",
+      price: 3200,
+      type: "double",
+      occupancy: "DOUBLE OCC.",
+      location: "Near Aurobindo",
+      rating: 4.9,
+      reviewsCount: 11,
+      description: "Bright and airy double room near Aurobindo campus, featuring individual beds, ceiling fan, storage racks, and daily maintenance.",
+      image: "images/room-double-5.jpg",
+      amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Furnished"]
+    },
+    {
+      id: 7,
+      name: "Standard Triple Sharing",
+      price: 2800,
+      type: "triple",
+      occupancy: "TRIPLE OCC.",
+      location: "Pardesipura",
+      rating: 4.6,
+      reviewsCount: 17,
+      description: "Standard triple room with spacious layout, tiled flooring, natural airflow, and proximity to coaching institutes & Pardesipura IT hub.",
+      image: "images/room-bed.jpg",
+      amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Water Included"]
+    },
+    {
+      id: 8,
+      name: "Economy Budget Room",
+      price: 2500,
+      type: "budget",
+      occupancy: "BUDGET OCC.",
+      location: "Near Aurobindo",
+      rating: 4.4,
+      reviewsCount: 14,
+      description: "Lowest cost budget accommodation near Aurobindo with essential utilities, clean drinking RO water, and safe CCTV premises.",
+      image: "images/room-balcony.jpg",
+      amenities: ["CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
     }
   ],
   users: [
@@ -108,15 +137,15 @@ const SEED_DATA = {
     {
       id: "BK-829103",
       roomId: 1,
-      roomName: "Deluxe King Room",
+      roomName: "Cozy Single Suite",
       guestName: "Rajat Yadav",
       guestEmail: "rajatyadav25009@gmail.com",
       userId: "rajatyadav25009@gmail.com",
       checkIn: "2026-11-20",
       checkOut: "2026-11-22",
-      guests: 2,
+      guests: 1,
       nights: 2,
-      totalPrice: 5600,
+      totalPrice: 7000,
       status: "confirmed",
       createdAt: "2026-11-14T02:00:00.000Z"
     }

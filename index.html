@@ -36,40 +36,209 @@
     </div>
   </header>
 
-  <!-- Search Filter Form -->
-  <section class="search-section">
-    <form class="search-form" id="searchForm">
-      <label>
-        CHECK-IN
-        <input type="date" id="searchCheckIn" required>
-      </label>
-      <label>
-        CHECK-OUT
-        <input type="date" id="searchCheckOut" required>
-      </label>
-      <label>
-        GUESTS
-        <select id="searchGuests">
-          <option value="1">1 Guest</option>
-          <option value="2" selected>2 Guests</option>
-          <option value="3">3 Guests</option>
-          <option value="4">4 Guests</option>
-        </select>
-      </label>
-      <button class="search-button" type="submit">Find a Room</button>
-    </form>
-  </section>
-
-  <!-- Hotel Rooms Grid Section -->
+  <!-- Rooms Browse & Live Filter Section -->
   <section class="rooms-section" id="rooms">
-    <div class="section-heading">
-      <span class="eyebrow">STAY YOUR WAY</span>
-      <h2>Rooms Designed For You</h2>
-      <p>Find the perfect space for your next getaway, corporate visit, or family vacation.</p>
-    </div>
+    <div class="rooms-container-inner">
 
-    <div class="room-grid" id="roomGrid">
-      <!-- 5 Rooms are dynamically rendered here by app.js -->
+      <!-- Breadcrumbs -->
+      <div class="browse-breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="bc-sep">&gt;</span>
+        <span class="bc-current">Browse Rooms</span>
+      </div>
+
+      <!-- Main Heading Block -->
+      <div class="rooms-heading-block">
+        <h1 class="rooms-main-title">Available PG Rooms in Indore</h1>
+        <p class="rooms-main-subtitle">₹2,500 – ₹3,500/month • Electricity &amp; Water Included • 3 Prime Locations</p>
+      </div>
+
+      <!-- Live Search Bar -->
+      <div class="search-bar-wrapper">
+        <span class="search-bar-icon">🔍</span>
+        <input type="text" id="roomSearchInput" class="room-search-input" placeholder="Search by name, location, or type..." oninput="applyRoomFilters()">
+        <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearSearchInput()" style="display:none;" title="Clear search">✕</button>
+      </div>
+
+      <!-- Two-Column Interactive Layout: Filters Sidebar + Results Grid -->
+      <div class="rooms-browse-layout">
+
+        <!-- Left Column: Filter Sidebar -->
+        <aside class="filter-sidebar">
+          <div class="filter-sidebar-header">
+            <div class="filter-title-wrap">
+              <span class="filter-icon">⚙️</span>
+              <h3>Filter Rooms</h3>
+            </div>
+            <button type="button" class="btn-reset-filters" onclick="resetAllFilters()">Reset all</button>
+          </div>
+
+          <!-- 1. Location Filter -->
+          <div class="filter-group">
+            <div class="filter-group-title">
+              <span class="filter-group-icon">📍</span> LOCATION
+            </div>
+            <div class="filter-checkbox-list">
+              <label class="filter-checkbox-label">
+                <input type="checkbox" class="filter-location-cb" value="Pardesipura" onchange="applyRoomFilters()">
+                <span class="custom-checkbox"></span>
+                <span>Pardesipura</span>
+              </label>
+              <label class="filter-checkbox-label">
+                <input type="checkbox" class="filter-location-cb" value="Near Aurobindo" onchange="applyRoomFilters()">
+                <span class="custom-checkbox"></span>
+                <span>Near Aurobindo</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 2. Max Price Slider -->
+          <div class="filter-group">
+            <div class="filter-group-header-row">
+              <div class="filter-group-title">
+                <span class="filter-group-icon">💰</span> MAX PRICE / MONTH
+              </div>
+            </div>
+            <div class="price-slider-row">
+              <span class="price-min-label">₹2,500</span>
+              <span class="price-val-badge" id="maxPriceBadge">Up to ₹3,500</span>
+            </div>
+            <div class="range-slider-wrapper">
+              <input type="range" id="priceRangeSlider" min="2500" max="3500" step="100" value="3500" oninput="handlePriceSlider(this.value)">
+            </div>
+            <div class="price-ticks-row">
+              <span>2.5k</span>
+              <span>2.8k</span>
+              <span>3.2k</span>
+              <span>3.5k</span>
+            </div>
+          </div>
+
+          <!-- 3. Room Type 2x2 Grid -->
+          <div class="filter-group">
+            <div class="filter-group-title">
+              <span class="filter-group-icon">🛏️</span> ROOM TYPE
+            </div>
+            <div class="room-type-filter-grid">
+              <button type="button" class="type-filter-card" data-type="single" onclick="toggleTypeFilter(this, 'single')">
+                <span class="type-name">Single</span>
+                <span class="type-price">₹3,500</span>
+                <span class="type-unit">/month</span>
+              </button>
+              <button type="button" class="type-filter-card" data-type="double" onclick="toggleTypeFilter(this, 'double')">
+                <span class="type-name">Double</span>
+                <span class="type-price">₹3,200</span>
+                <span class="type-unit">/month</span>
+              </button>
+              <button type="button" class="type-filter-card" data-type="triple" onclick="toggleTypeFilter(this, 'triple')">
+                <span class="type-name">Triple</span>
+                <span class="type-price">₹2,800</span>
+                <span class="type-unit">/month</span>
+              </button>
+              <button type="button" class="type-filter-card" data-type="budget" onclick="toggleTypeFilter(this, 'budget')">
+                <span class="type-name">Budget</span>
+                <span class="type-price">₹2,500</span>
+                <span class="type-unit">/month</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Amenities Pills Grid -->
+          <div class="filter-group">
+            <div class="filter-group-title">
+              <span class="filter-group-icon">✨</span> AMENITIES
+            </div>
+            <div class="amenities-filter-grid">
+              <label class="amenity-checkbox-card">
+                <input type="checkbox" class="filter-amenity-cb" value="Wi-Fi" onchange="applyRoomFilters()">
+                <span class="amenity-checkbox-inner">
+                  <span class="amenity-icon">📶</span> Wi-Fi
+                </span>
+              </label>
+              <label class="amenity-checkbox-card">
+                <input type="checkbox" class="filter-amenity-cb" value="CCTV" onchange="applyRoomFilters()">
+                <span class="amenity-checkbox-inner">
+                  <span class="amenity-icon">📹</span> CCTV
+                </span>
+              </label>
+              <label class="amenity-checkbox-card">
+                <input type="checkbox" class="filter-amenity-cb" value="RO Water" onchange="applyRoomFilters()">
+                <span class="amenity-checkbox-inner">
+                  <span class="amenity-icon">💧</span> RO Water
+                </span>
+              </label>
+              <label class="amenity-checkbox-card">
+                <input type="checkbox" class="filter-amenity-cb" value="Parking" onchange="applyRoomFilters()">
+                <span class="amenity-checkbox-inner">
+                  <span class="amenity-icon">🅿️</span> Parking
+                </span>
+              </label>
+              <label class="amenity-checkbox-card">
+                <input type="checkbox" class="filter-amenity-cb" value="Housekeeping" onchange="applyRoomFilters()">
+                <span class="amenity-checkbox-inner">
+                  <span class="amenity-icon">🧹</span> Housekeeping
+                </span>
+              </label>
+              <label class="amenity-checkbox-card">
+                <input type="checkbox" class="filter-amenity-cb" value="Furnished" onchange="applyRoomFilters()">
+                <span class="amenity-checkbox-inner">
+                  <span class="amenity-icon">🪑</span> Furnished
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 5. Min Rating -->
+          <div class="filter-group" style="border-bottom:none;">
+            <div class="filter-group-title">
+              <span class="filter-group-icon">⭐</span> MIN RATING
+            </div>
+            <div class="rating-filter-pills">
+              <button type="button" class="rating-pill active" data-rating="0" onclick="setRatingFilter(this, 0)">Any</button>
+              <button type="button" class="rating-pill" data-rating="4.5" onclick="setRatingFilter(this, 4.5)">4.5+</button>
+              <button type="button" class="rating-pill" data-rating="4.7" onclick="setRatingFilter(this, 4.7)">4.7+</button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Column: Results & Room Cards Grid -->
+        <div class="rooms-results-column">
+          <!-- Top Results Toolbar -->
+          <div class="results-toolbar">
+            <div class="results-count" id="roomsCountText">Showing 8 rooms found</div>
+            <div class="results-controls">
+              <div class="view-toggle-group">
+                <button type="button" class="view-toggle-btn active" id="viewBtnGrid" onclick="setRoomViewMode('grid')" aria-label="Grid View" title="Grid View">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+                </button>
+                <button type="button" class="view-toggle-btn" id="viewBtnList" onclick="setRoomViewMode('list')" aria-label="List View" title="List View">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg>
+                </button>
+              </div>
+              <select id="roomSortSelect" class="room-sort-select" onchange="applyRoomFilters()">
+                <option value="recommended">Recommended</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating-desc">Highest Rated</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Room Cards Container -->
+          <div class="room-grid" id="roomGrid">
+            <!-- Dynamically populated by app.js -->
+          </div>
+
+          <!-- Empty State (Hidden by default) -->
+          <div id="noRoomsMatch" class="no-rooms-box" style="display:none;">
+            <div style="font-size:38px;margin-bottom:10px;">🔍</div>
+            <h3 style="font-family:var(--font-serif);font-size:22px;color:var(--primary-color);margin-bottom:8px;">No rooms match your filters</h3>
+            <p style="color:var(--text-muted);font-size:14px;max-width:440px;margin:0 auto 16px;">Try unchecking some filters, increasing the max price slider, or resetting all filters.</p>
+            <button type="button" class="primary-button" onclick="resetAllFilters()" style="padding:9px 22px;">Reset All Filters</button>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 

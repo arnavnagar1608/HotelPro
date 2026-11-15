@@ -6,82 +6,111 @@
 
 const API_BASE = "http://localhost:5000/api";
 
-// --- 1. Master Data: 5 Hotel Rooms (Client Cache) ---
+// --- 1. Master Data: 8 PG Rooms in Indore (Client Cache) ---
 const DEFAULT_ROOMS = [
   {
     id: 1,
-    name: "Deluxe King Room",
-    price: 2800,
-    description: "Spacious room featuring a plush king-sized bed, city skyline view, workstation, and marble ensuite bathroom.",
-    image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800",
-    amenities: [
-      "📶 High-Speed Wi-Fi",
-      "💡 24/7 Power & Light Backup",
-      "🅿️ Free On-Site Parking",
-      "🍽️ Restaurants Nearby",
-      "💧 24/7 Hot & Cold Water",
-      "❄️ Air Conditioning"
-    ]
+    name: "Cozy Single Suite",
+    price: 3500,
+    type: "single",
+    occupancy: "SINGLE OCC.",
+    location: "Pardesipura",
+    rating: 5.0,
+    reviewsCount: 12,
+    description: "Private furnished single room with dedicated work desk, high-speed Wi-Fi, wall storage racks, and complete privacy for students and working professionals.",
+    image: "images/room-doorway-2.jpg",
+    amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Electricity Included"]
   },
   {
     id: 2,
-    name: "Executive Luxury Suite",
-    price: 5500,
-    description: "Opulent suite with a separate master bedroom, elegant living lounge, mini-bar, and panoramic city vistas.",
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
-    amenities: [
-      "📶 Ultra-Fast 5G Wi-Fi",
-      "💡 24/7 Power & Light Backup",
-      "🅿️ Valet & Reserved Parking",
-      "🍽️ In-House Dining & Cafes Nearby",
-      "💧 24/7 RO & Hot Water",
-      "❄️ Central Climate Control"
-    ]
+    name: "Double Comfort Room",
+    price: 3200,
+    type: "double",
+    occupancy: "DOUBLE OCC.",
+    location: "Pardesipura",
+    rating: 4.8,
+    reviewsCount: 9,
+    description: "Spacious double-occupancy room ideal for two residents. Each resident gets their own bed and storage space. Well-ventilated with natural light.",
+    image: "images/room-double-3.jpg",
+    amenities: ["Wi-Fi", "CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
   },
   {
     id: 3,
-    name: "Family Garden Haven",
-    price: 4200,
-    description: "Generously sized family room equipped with two queen beds, garden patio access, and kid-friendly amenities.",
-    image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
-    amenities: [
-      "📶 High-Speed Wi-Fi",
-      "💡 24/7 Power & Light Backup",
-      "🅿️ Spacious Family Parking",
-      "🍽️ Family Restaurants Nearby",
-      "💧 24/7 Hot & Purified Water",
-      "🌿 Private Garden Patio"
-    ]
+    name: "Triple Sharing Room",
+    price: 2800,
+    type: "triple",
+    occupancy: "TRIPLE OCC.",
+    location: "Pardesipura",
+    rating: 4.7,
+    reviewsCount: 15,
+    description: "Affordable triple sharing setup with individual storage racks, shared desk, regular housekeeping, and 24/7 water supply.",
+    image: "images/room-single-1.jpg",
+    amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Water Included"]
   },
   {
     id: 4,
-    name: "Ocean Vista Penthouse",
-    price: 8500,
-    description: "Top-floor penthouse with breathtaking ocean panorama, private jacuzzi terrace, and complimentary gourmet breakfast.",
-    image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800",
-    amenities: [
-      "📶 Ultra-Fast Wi-Fi",
-      "💡 24/7 Power & Light Backup",
-      "🅿️ Reserved VIP Parking",
-      "🍽️ Rooftop Dining & Restaurants Nearby",
-      "💧 Jacuzzi & 24/7 Hot Water",
-      "❄️ Premium Climate Control"
-    ]
+    name: "Budget Triple Room",
+    price: 2500,
+    type: "budget",
+    occupancy: "BUDGET OCC.",
+    location: "Pardesipura",
+    rating: 4.5,
+    reviewsCount: 20,
+    description: "Economical budget triple sharing room with clean surroundings, RO water, security cameras, and electricity included.",
+    image: "images/room-shelves.jpg",
+    amenities: ["CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
   },
   {
     id: 5,
-    name: "Cozy Studio Single",
-    price: 1800,
-    description: "Modern, streamlined room perfect for solo travelers and business professionals needing quiet comfort and fast Wi-Fi.",
-    image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800",
-    amenities: [
-      "📶 High-Speed Wi-Fi",
-      "💡 24/7 Power & Light Backup",
-      "🅿️ Two-Wheeler & Car Parking",
-      "🍽️ Food Joints & Cafes Nearby",
-      "💧 24/7 Running Hot & Cold Water",
-      "💻 Dedicated Work Desk"
-    ]
+    name: "Premium Single Room",
+    price: 3500,
+    type: "single",
+    occupancy: "SINGLE OCC.",
+    location: "Near Aurobindo",
+    rating: 5.0,
+    reviewsCount: 8,
+    description: "Quiet and comfortable single room near Aurobindo Hospital / College, equipped with desk shelves, high-speed Wi-Fi, and 24/7 power backup.",
+    image: "images/room-study-4.jpg",
+    amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Electricity Included"]
+  },
+  {
+    id: 6,
+    name: "Deluxe Double Occupancy",
+    price: 3200,
+    type: "double",
+    occupancy: "DOUBLE OCC.",
+    location: "Near Aurobindo",
+    rating: 4.9,
+    reviewsCount: 11,
+    description: "Bright and airy double room near Aurobindo campus, featuring individual beds, ceiling fan, storage racks, and daily maintenance.",
+    image: "images/room-double-5.jpg",
+    amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Furnished"]
+  },
+  {
+    id: 7,
+    name: "Standard Triple Sharing",
+    price: 2800,
+    type: "triple",
+    occupancy: "TRIPLE OCC.",
+    location: "Pardesipura",
+    rating: 4.6,
+    reviewsCount: 17,
+    description: "Standard triple room with spacious layout, tiled flooring, natural airflow, and proximity to coaching institutes & Pardesipura IT hub.",
+    image: "images/room-bed.jpg",
+    amenities: ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Water Included"]
+  },
+  {
+    id: 8,
+    name: "Economy Budget Room",
+    price: 2500,
+    type: "budget",
+    occupancy: "BUDGET OCC.",
+    location: "Near Aurobindo",
+    rating: 4.4,
+    reviewsCount: 14,
+    description: "Lowest cost budget accommodation near Aurobindo with essential utilities, clean drinking RO water, and safe CCTV premises.",
+    image: "images/room-balcony.jpg",
+    amenities: ["CCTV", "RO Water", "Housekeeping", "Furnished", "Electricity Included"]
   }
 ];
 
@@ -112,8 +141,19 @@ const PROPERTY_LOCATIONS = [
 
 // --- 3. Database Initialization (Browser Storage) ---
 function initDatabase() {
-  if (!localStorage.getItem("hp_rooms")) {
+  const currentStored = localStorage.getItem("hp_rooms");
+  // Automatically migrate from old mock hotel rooms or test rooms to the 8 real PG rooms
+  if (!currentStored || currentStored.includes("Deluxe King Room") || currentStored.includes("svdzfg x") || currentStored.includes("Ocean Vista Penthouse") || currentStored.includes("Family Garden Haven")) {
     localStorage.setItem("hp_rooms", JSON.stringify(DEFAULT_ROOMS));
+  } else {
+    try {
+      const parsed = JSON.parse(currentStored);
+      if (!Array.isArray(parsed) || parsed.length < 8) {
+        localStorage.setItem("hp_rooms", JSON.stringify(DEFAULT_ROOMS));
+      }
+    } catch {
+      localStorage.setItem("hp_rooms", JSON.stringify(DEFAULT_ROOMS));
+    }
   }
   if (!localStorage.getItem("hp_users")) {
     const seedUsers = [
@@ -127,15 +167,15 @@ function initDatabase() {
       {
         id: "BK-829103",
         roomId: 1,
-        roomName: "Deluxe King Room",
+        roomName: "Cozy Single Suite",
         guestName: "Rajat Yadav",
         guestEmail: "rajatyadav25009@gmail.com",
         userId: "rajatyadav25009@gmail.com",
         checkIn: "2026-11-20",
         checkOut: "2026-11-22",
-        guests: 2,
+        guests: 1,
         nights: 2,
-        totalPrice: 5600,
+        totalPrice: 7000,
         status: "confirmed",
         createdAt: new Date().toISOString()
       }
@@ -150,7 +190,7 @@ function getStoredRooms() {
     const raw = localStorage.getItem("hp_rooms");
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed) && parsed.length >= 8 && !parsed.some(r => r.name === 'Deluxe King Room' || r.name === 'svdzfg x')) {
         return parsed;
       }
     }
@@ -227,32 +267,72 @@ function updateNavigation() {
 // --- 5. Room Retrieval: Connects to Backend REST API with Local Fallback ---
 let loadedRooms = DEFAULT_ROOMS;
 
+// Filter state
+let activeFilters = {
+  search: "",
+  locations: [],
+  maxPrice: 3500,
+  types: [],
+  amenities: [],
+  minRating: 0,
+  sortBy: "recommended",
+  viewMode: "grid"
+};
+
 async function fetchRooms() {
   // 1. Try Supabase Cloud Database first
   const sb = getSupabaseClient();
   if (sb) {
     try {
       const { data, error } = await sb.from("rooms").select("*").order("room_id", { ascending: true });
-      if (!error && data && data.length > 0) {
-        loadedRooms = data.map(r => ({
-          id: r.room_id || r.id,
-          name: r.name,
-          price: Number(r.price),
-          description: r.description,
-          image: r.image,
-          amenities: Array.isArray(r.amenities) && r.amenities.length > 0 ? r.amenities : [
-            "📶 High-Speed Wi-Fi",
-            "💡 24/7 Power Backup",
-            "🅿️ Free Parking",
-            "🍽️ Restaurant Nearby",
-            "💧 24/7 Hot Water",
-            "❄️ Air Conditioning"
-          ]
-        }));
-        localStorage.setItem("hp_rooms", JSON.stringify(loadedRooms));
-        console.log("✓ Rooms loaded live from Supabase Cloud Database!");
-        renderRooms(loadedRooms);
-        return;
+      if (!error && data) {
+        // Detect if Supabase contains old mock rooms (Deluxe King Room, svdzfg x, etc.) or has fewer than 8 rooms
+        const hasLegacy = data.length < 8 || data.some(r => 
+          r.name === 'Deluxe King Room' || r.name === 'svdzfg x' || r.name === 'Executive Luxury Suite' || r.name === 'Ocean Vista Penthouse'
+        );
+
+        if (hasLegacy) {
+          console.log("Supabase contains old mock rooms. Auto-updating Supabase to the 8 official PG rooms with real photos...");
+          try {
+            await sb.from("rooms").delete().neq("room_id", 0);
+            const rowsToInsert = DEFAULT_ROOMS.map(r => ({
+              room_id: Number(r.id),
+              name: r.name,
+              price: Number(r.price),
+              description: r.description,
+              image: r.image,
+              amenities: r.amenities
+            }));
+            await sb.from("rooms").insert(rowsToInsert);
+            console.log("✓ Successfully upgraded Supabase rooms table!");
+          } catch (upgErr) {
+            console.warn("Could not auto-write to Supabase:", upgErr.message);
+          }
+          loadedRooms = DEFAULT_ROOMS;
+          localStorage.setItem("hp_rooms", JSON.stringify(DEFAULT_ROOMS));
+          applyRoomFilters();
+          return;
+        } else if (data.length >= 8) {
+          loadedRooms = data.map(r => ({
+            id: r.room_id || r.id,
+            name: r.name,
+            price: Number(r.price),
+            type: r.type || (Number(r.price) >= 3500 ? 'single' : (Number(r.price) >= 3000 ? 'double' : (Number(r.price) >= 2700 ? 'triple' : 'budget'))),
+            occupancy: r.occupancy || (r.name.includes("Single") ? "SINGLE OCC." : (r.name.includes("Double") ? "DOUBLE OCC." : (r.name.includes("Budget") ? "BUDGET OCC." : "TRIPLE OCC."))),
+            location: r.location || (r.name.includes("Aurobindo") || r.id === 5 || r.id === 6 || r.id === 8 ? "Near Aurobindo" : "Pardesipura"),
+            rating: Number(r.rating) || 4.8,
+            reviewsCount: Number(r.reviews_count || r.reviewsCount) || 12,
+            description: r.description,
+            image: r.image || "images/room-double-3.jpg",
+            amenities: Array.isArray(r.amenities) && r.amenities.length > 0 ? r.amenities : [
+              "Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping", "Electricity Included"
+            ]
+          }));
+          localStorage.setItem("hp_rooms", JSON.stringify(loadedRooms));
+          console.log("✓ Rooms loaded live from Supabase Cloud Database!");
+          applyRoomFilters();
+          return;
+        }
       }
     } catch (sbErr) {
       console.warn("Supabase rooms fetch error:", sbErr.message);
@@ -264,21 +344,220 @@ async function fetchRooms() {
     const res = await fetch(`${API_BASE}/rooms`, { method: "GET" });
     if (res.ok) {
       const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
+      if (Array.isArray(data) && data.length >= 8 && !data.some(r => r.name === 'Deluxe King Room' || r.name === 'svdzfg x')) {
         loadedRooms = data;
         localStorage.setItem("hp_rooms", JSON.stringify(data));
         console.log("✓ Rooms loaded live from backend database (database.json)");
+        applyRoomFilters();
+        return;
       }
     }
   } catch (err) {
     console.log("Backend server offline, using local cached rooms:", err.message);
-    try {
-      loadedRooms = JSON.parse(localStorage.getItem("hp_rooms")) || DEFAULT_ROOMS;
-    } catch {
-      loadedRooms = DEFAULT_ROOMS;
+  }
+
+  // 3. Fallback to DEFAULT_ROOMS
+  let localData = null;
+  try {
+    localData = JSON.parse(localStorage.getItem("hp_rooms"));
+  } catch {}
+
+  if (localData && Array.isArray(localData) && localData.length >= 8 && !localData.some(r => r.name === 'Deluxe King Room' || r.name === 'svdzfg x')) {
+    loadedRooms = localData;
+  } else {
+    loadedRooms = DEFAULT_ROOMS;
+    localStorage.setItem("hp_rooms", JSON.stringify(DEFAULT_ROOMS));
+  }
+  applyRoomFilters();
+}
+
+function handlePriceSlider(val) {
+  activeFilters.maxPrice = Number(val);
+  const badge = document.getElementById("maxPriceBadge");
+  if (badge) badge.textContent = `Up to ₹${Number(val).toLocaleString("en-IN")}`;
+  applyRoomFilters();
+}
+
+function toggleTypeFilter(btn, type) {
+  const idx = activeFilters.types.indexOf(type);
+  if (idx > -1) {
+    activeFilters.types.splice(idx, 1);
+    btn.classList.remove("active-type");
+  } else {
+    activeFilters.types.push(type);
+    btn.classList.add("active-type");
+  }
+  applyRoomFilters();
+}
+
+function setRatingFilter(btn, rating) {
+  activeFilters.minRating = Number(rating);
+  document.querySelectorAll(".rating-pill").forEach(el => el.classList.remove("active"));
+  btn.classList.add("active");
+  applyRoomFilters();
+}
+
+function setRoomViewMode(mode) {
+  activeFilters.viewMode = mode;
+  const gridBtn = document.getElementById("viewBtnGrid");
+  const listBtn = document.getElementById("viewBtnList");
+  const container = document.getElementById("roomGrid");
+  if (gridBtn && listBtn) {
+    if (mode === "grid") {
+      gridBtn.classList.add("active");
+      listBtn.classList.remove("active");
+    } else {
+      listBtn.classList.add("active");
+      gridBtn.classList.remove("active");
     }
   }
-  renderRooms(loadedRooms);
+  if (container) {
+    container.className = mode === "list" ? "room-grid list-view" : "room-grid";
+  }
+}
+
+function clearSearchInput() {
+  const input = document.getElementById("roomSearchInput");
+  const clearBtn = document.getElementById("searchClearBtn");
+  if (input) input.value = "";
+  if (clearBtn) clearBtn.style.display = "none";
+  activeFilters.search = "";
+  applyRoomFilters();
+}
+
+function resetAllFilters() {
+  activeFilters = {
+    search: "",
+    locations: [],
+    maxPrice: 3500,
+    types: [],
+    amenities: [],
+    minRating: 0,
+    sortBy: "recommended",
+    viewMode: activeFilters.viewMode || "grid"
+  };
+
+  const searchInput = document.getElementById("roomSearchInput");
+  if (searchInput) searchInput.value = "";
+  const clearBtn = document.getElementById("searchClearBtn");
+  if (clearBtn) clearBtn.style.display = "none";
+
+  document.querySelectorAll(".filter-location-cb").forEach(cb => cb.checked = false);
+  
+  const slider = document.getElementById("priceRangeSlider");
+  if (slider) slider.value = 3500;
+  const badge = document.getElementById("maxPriceBadge");
+  if (badge) badge.textContent = "Up to ₹3,500";
+
+  document.querySelectorAll(".type-filter-card").forEach(c => c.classList.remove("active-type"));
+  document.querySelectorAll(".filter-amenity-cb").forEach(cb => cb.checked = false);
+  
+  document.querySelectorAll(".rating-pill").forEach((p, idx) => {
+    if (idx === 0) p.classList.add("active");
+    else p.classList.remove("active");
+  });
+
+  const sortSelect = document.getElementById("roomSortSelect");
+  if (sortSelect) sortSelect.value = "recommended";
+
+  applyRoomFilters();
+}
+
+function applyRoomFilters() {
+  // Read search input
+  const searchInput = document.getElementById("roomSearchInput");
+  if (searchInput) {
+    activeFilters.search = searchInput.value.trim().toLowerCase();
+    const clearBtn = document.getElementById("searchClearBtn");
+    if (clearBtn) clearBtn.style.display = activeFilters.search ? "block" : "none";
+  }
+
+  // Location checkboxes
+  const locCbs = Array.from(document.querySelectorAll(".filter-location-cb:checked")).map(cb => cb.value);
+  activeFilters.locations = locCbs;
+
+  // Amenities checkboxes
+  const amCbs = Array.from(document.querySelectorAll(".filter-amenity-cb:checked")).map(cb => cb.value);
+  activeFilters.amenities = amCbs;
+
+  // Sort
+  const sortSelect = document.getElementById("roomSortSelect");
+  if (sortSelect) activeFilters.sortBy = sortSelect.value;
+
+  const sourceRooms = (loadedRooms && loadedRooms.length > 0) ? loadedRooms : DEFAULT_ROOMS;
+
+  let filtered = sourceRooms.filter(room => {
+    // 1. Search text
+    if (activeFilters.search) {
+      const q = activeFilters.search;
+      const matchName = (room.name || "").toLowerCase().includes(q);
+      const matchLoc = (room.location || "").toLowerCase().includes(q);
+      const matchType = (room.type || "").toLowerCase().includes(q);
+      const matchDesc = (room.description || "").toLowerCase().includes(q);
+      if (!matchName && !matchLoc && !matchType && !matchDesc) return false;
+    }
+
+    // 2. Location
+    if (activeFilters.locations.length > 0) {
+      const loc = (room.location || "").toLowerCase();
+      const match = activeFilters.locations.some(l => loc.includes(l.toLowerCase()));
+      if (!match) return false;
+    }
+
+    // 3. Max Price
+    if (Number(room.price) > activeFilters.maxPrice) {
+      return false;
+    }
+
+    // 4. Room Type
+    if (activeFilters.types.length > 0) {
+      const rType = (room.type || "").toLowerCase();
+      if (!activeFilters.types.includes(rType)) return false;
+    }
+
+    // 5. Amenities
+    if (activeFilters.amenities.length > 0) {
+      const roomAms = (room.amenities || []).map(a => a.toLowerCase());
+      const hasAll = activeFilters.amenities.every(req => 
+        roomAms.some(a => a.includes(req.toLowerCase()))
+      );
+      if (!hasAll) return false;
+    }
+
+    // 6. Min Rating
+    const roomRating = Number(room.rating) || 4.5;
+    if (roomRating < activeFilters.minRating) {
+      return false;
+    }
+
+    return true;
+  });
+
+  // Sorting
+  if (activeFilters.sortBy === "price-asc") {
+    filtered.sort((a, b) => Number(a.price) - Number(b.price));
+  } else if (activeFilters.sortBy === "price-desc") {
+    filtered.sort((a, b) => Number(b.price) - Number(a.price));
+  } else if (activeFilters.sortBy === "rating-desc") {
+    filtered.sort((a, b) => (Number(b.rating) || 4.5) - (Number(a.rating) || 4.5));
+  }
+
+  // Update room count text
+  const countEl = document.getElementById("roomsCountText");
+  if (countEl) {
+    countEl.textContent = `Showing ${filtered.length} room${filtered.length === 1 ? '' : 's'} found`;
+  }
+
+  // Render rooms or empty state
+  const noMatchBox = document.getElementById("noRoomsMatch");
+  const container = document.getElementById("roomGrid");
+  if (filtered.length === 0) {
+    if (container) container.innerHTML = "";
+    if (noMatchBox) noMatchBox.style.display = "block";
+  } else {
+    if (noMatchBox) noMatchBox.style.display = "none";
+    renderRooms(filtered);
+  }
 }
 
 function renderRooms(rooms) {
@@ -289,44 +568,57 @@ function renderRooms(rooms) {
   const isAdmin = currentUser && currentUser.role === "admin";
 
   container.innerHTML = rooms.map(room => {
-    const amenities = room.amenities && Array.isArray(room.amenities) && room.amenities.length > 0
+    const rawAmenities = room.amenities && Array.isArray(room.amenities) && room.amenities.length > 0
       ? room.amenities
-      : [
-          "📶 High-Speed Wi-Fi",
-          "💡 24/7 Power Backup",
-          "🅿️ Free Parking",
-          "🍽️ Restaurant Nearby",
-          "💧 24/7 Hot Water",
-          "❄️ Air Conditioning"
-        ];
+      : ["Wi-Fi", "CCTV", "RO Water", "Parking", "Housekeeping"];
+
+    const cleanAmenities = rawAmenities.map(a => a.replace(/^[^\w\s]+/, '').trim());
+    const displayPills = cleanAmenities.slice(0, 4);
+    const extraCount = cleanAmenities.length - 4;
 
     return `
     <article class="room-card" id="room-${room.id}">
-      <a href="room-details.html?id=${room.id}" style="display:block;cursor:pointer;">
-        <img src="${room.image}" alt="${room.name}" loading="lazy">
-      </a>
+      <div class="room-card-media">
+        <a href="room-details.html?id=${room.id}" style="display:block;">
+          <img src="${room.image}" alt="${room.name}" loading="lazy" onerror="this.src='images/room-double-3.jpg'">
+        </a>
+        <div class="room-media-badges">
+          <span class="badge-occupancy-pill">${room.occupancy || 'COMFORT OCC.'}</span>
+          <span class="badge-available-pill">🟢 Available</span>
+        </div>
+      </div>
       <div class="room-details">
-        <h3><a href="room-details.html?id=${room.id}" style="color:inherit;text-decoration:none;">${room.name}</a></h3>
-        <p>${room.description}</p>
+        <h3 class="room-card-title">
+          <a href="room-details.html?id=${room.id}">${room.name}</a>
+        </h3>
+        <div class="room-card-location">
+          <span class="loc-pin-icon">📍</span> ${room.location || 'Pardesipura'}
+        </div>
         
-        <!-- Room Amenities -->
-        <div class="room-amenities">
-          ${amenities.map(a => `<span class="amenity-pill">${a}</span>`).join("")}
+        <div class="room-amenities-tags">
+          ${displayPills.map(p => `<span class="room-amenity-tag">${p}</span>`).join("")}
+          ${extraCount > 0 ? `<span class="room-amenity-tag extra">+${extraCount} more</span>` : ''}
         </div>
 
-        <div class="room-footer">
-          <div>
+        <div class="room-card-footer">
+          <div class="room-rating-info">
+            <span class="stars-gold">⭐⭐⭐⭐⭐</span>
+            <strong class="rating-num">${room.rating ? Number(room.rating).toFixed(1) : '4.8'}</strong>
+            <span class="reviews-count">(${room.reviewsCount || 10} reviews)</span>
+          </div>
+          <div class="room-price-info">
             <strong>₹${Number(room.price).toLocaleString("en-IN")}</strong>
-            <span> / night</span>
+            <span class="price-cycle">/month</span>
           </div>
-          <div style="display:flex;gap:8px;align-items:center;">
-            ${isAdmin ? `
-              <button type="button" class="action-btn-success" onclick="event.stopPropagation(); openHomeEditRoom(${room.id})" style="font-size:12px;padding:6px 10px;" title="Admin: Edit this room">✏️ Edit</button>
-            ` : ''}
-            <a href="room-details.html?id=${room.id}" class="book-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
-              Book Now →
-            </a>
-          </div>
+        </div>
+
+        <div class="room-card-actions">
+          ${isAdmin ? `
+            <button type="button" class="action-btn-success" onclick="event.stopPropagation(); openHomeEditRoom(${room.id})" style="font-size:12px;padding:6px 10px;" title="Admin: Edit this room">✏️ Edit</button>
+          ` : ''}
+          <a href="room-details.html?id=${room.id}" class="btn-card-view">
+            Book a Visit / View →
+          </a>
         </div>
       </div>
     </article>
